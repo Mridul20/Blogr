@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const og = require('open-graph');
 
 const app = express();
 
@@ -16,6 +17,30 @@ app.get("/",function(req,res){
 
 app.get("/edit",function(req,res){
     res.render("content");
+});
+
+app.get("/fetchUrl",function(req,res){
+    const {method, url} = req;
+   
+    const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
+
+    og(link, function(err, meta) {
+        const newmeta = {
+            title : meta.title,
+            description : meta.description,
+            image : {
+                url : meta.image.url
+            }
+        }
+        meta = newmeta;
+        const jsonData = JSON.stringify({
+            success: 1,
+            link : link,
+            meta
+          });
+
+        res.send(jsonData);
+    });
 });
 app.listen("3000",function(){
     console.log("Server started at port 3000");
