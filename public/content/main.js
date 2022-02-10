@@ -5,5 +5,6 @@ const editor = new EditorJS({
         class: Header,
         shortcut: 'CMD+SHIFT+H',
       }
+      
     }
   });
