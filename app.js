@@ -50,6 +50,9 @@ app.post("/save",function(req,res){
 app.get("/search",function(req,res){
     res.render("search");
 })
+app.get("/login",function(req,res){
+    res.render("login");
+})
 app.listen("3000",function(){
     console.log("Server started at port 3000");
 });
