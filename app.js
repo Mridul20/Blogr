@@ -42,6 +42,11 @@ app.get("/fetchUrl",function(req,res){
         res.send(jsonData);
     });
 });
+
+app.post("/save",function(req,res){
+    console.log(req.body);
+    res.send({"t":"e"});
+});
 app.get("/search",function(req,res){
     res.render("search");
 })
