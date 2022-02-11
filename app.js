@@ -42,6 +42,9 @@ app.get("/fetchUrl",function(req,res){
         res.send(jsonData);
     });
 });
+app.get("/search",function(req,res){
+    res.render("search");
+})
 app.listen("3000",function(){
     console.log("Server started at port 3000");
 });
