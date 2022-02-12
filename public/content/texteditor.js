@@ -3,12 +3,12 @@ const editor = new EditorJS({
         header: Header,
         raw: RawTool,
         image: SimpleImage, 
-        linkTool: {
-            class: LinkTool,
-            config: {
-              endpoint: 'http://localhost:3000/fetchUrl', // Your backend endpoint for url data fetching,
-            }
-          },
+        // linkTool: {
+        //     class: LinkTool,
+        //     config: {
+        //       endpoint: 'http://localhost:3000/fetchUrl', // Your backend endpoint for url data fetching,
+        //     }
+        //   },
           checklist: {
             class: Checklist,
             inlineToolbar: true,
@@ -16,7 +16,7 @@ const editor = new EditorJS({
           list: {
             class: List,
             inlineToolbar: true,
-          },
+          },  
           embed: Embed,
           quote: Quote,
     }
@@ -31,13 +31,12 @@ const editor = new EditorJS({
                 alert("Enter Blog Title");
                 return; 
             }
-
             fetch('http://localhost:3000/save', {
                 method: 'POST',
                 mode: 'cors', 
                 body: JSON.stringify({
                     title: document.getElementById("title").value,
-                    blog_body: JSON.stringify(output),
+                    blogdata: JSON.stringify(output),
                     // id: "{{id}}",
                     // tags: $("#blog-tags").val()
                 }),
