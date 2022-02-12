@@ -2070,3 +2070,21 @@ section {
   background: linear-gradient(45deg, #3eb8ff, #3e61ff);
   
 }
+
+
+.btn{
+  text-align: center;
+  align-items:center;
+  justify-content: center;
+  display: flex;
+  background:rgb(119, 206, 119);
+  padding:.4rem;
+  width:20%;
+  margin:auto;
+  border-radius: 8px;
+  color:white;
+  cursor: pointer;
+}
+.btn:hover{
+  background:rgb(17, 170, 17);
+}

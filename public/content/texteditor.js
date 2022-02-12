@@ -3,12 +3,12 @@ const editor = new EditorJS({
         header: Header,
         raw: RawTool,
         image: SimpleImage, 
-        // linkTool: {
-        //     class: LinkTool,
-        //     config: {
-        //       endpoint: 'http://localhost:3000/fetchUrl', // Your backend endpoint for url data fetching,
-        //     }
-        //   },
+        linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: 'http://localhost:3000/fetchUrl', // Your backend endpoint for url data fetching,
+            }
+          },
           checklist: {
             class: Checklist,
             inlineToolbar: true,
@@ -24,13 +24,9 @@ const editor = new EditorJS({
 
 
   function savedata() {
-    console.log("BRSF DAd");
     editor
         .save()
         .then((output) => {
-          console.log("output");
-            console.log(output);
-            console.log(document.getElementById("title").value);
             if (!document.getElementById("title").value) {
                 alert("Enter Blog Title");
                 return; 
@@ -38,14 +34,13 @@ const editor = new EditorJS({
 
             fetch('http://localhost:3000/save', {
                 method: 'POST',
-                mode: 'cors', // this cannot be 'no-cors'
-                // body: JSON.stringify({
-                //     title: document.getElementById("title").value,
-                //     blog_body: JSON.stringify(output),
-                //     // id: "{{id}}",
-                //     // tags: $("#blog-tags").val()
-                // }),
-                body :{title : "hello" , body : "mridul"}  ,
+                mode: 'cors', 
+                body: JSON.stringify({
+                    title: document.getElementById("title").value,
+                    blog_body: JSON.stringify(output),
+                    // id: "{{id}}",
+                    // tags: $("#blog-tags").val()
+                }),
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',

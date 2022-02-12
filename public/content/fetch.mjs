@@ -1,6 +1,6 @@
-// import fetch from "node-fetch";
+import fetch from "node-fetch";
 
-// fetch('http://localhost:3000/save', {
+// fetch('http://127.0.0.1:3000/save', {
 //   method: 'post',
 //   body: JSON.stringify({"user":{
 //       "email": "abx",
@@ -13,8 +13,10 @@
 // const body = {a: 1};
 
 // const response = await fetch('http://localhost:3000/save', {
-// 	method: 'post',
+// 	method: 'POST',
+//     mode : "cors",
 // 	body: JSON.stringify(body),
+
 // 	headers: {'Content-Type': 'application/json'}
 // });
 // const data = await response.json();
@@ -30,14 +32,14 @@
 
 // console.log(data);
 
-var yourUrl = "http://localhost:3000/save";
-import XMLHttpRequest from 'xhr2';
-var xhr = new XMLHttpRequest();
-xhr.open("POST", yourUrl, true);
-xhr.setRequestHeader('Content-Type', 'application/json');
-xhr.send(JSON.stringify({
-    "dw": "dwadad"
-}));
+// var yourUrl = "http://localhost:3000/save";
+// import XMLHttpRequest from 'xhr2';
+// var xhr = new XMLHttpRequest();
+// xhr.open("POST", yourUrl, true);
+// xhr.setRequestHeader('Content-Type', 'application/json');
+// xhr.send(JSON.stringify({
+//     "dw": "dwadad"
+// }));
 
 // fetch('http://localhost:3000/save', {
 //     method: 'POST',

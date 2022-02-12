@@ -2,14 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const og = require('open-graph');
-
+var restify = require('restify');
 const app = express();
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
-
+app.use(restify.plugins.bodyParser());
 
 app.get("/",function(req,res){
     res.render("home");
@@ -25,6 +25,8 @@ app.get("/fetchUrl",function(req,res){
     const link = decodeURIComponent(url.slice('/fetchUrl?url='.length));
 
     og(link, function(err, meta) {
+        console.log("meta");
+        console.log(meta);
         const newmeta = {
             title : meta.title,
             description : meta.description,
@@ -38,10 +40,11 @@ app.get("/fetchUrl",function(req,res){
             link : link,
             meta
           });
-
+        console.log(jsonData);
         res.send(jsonData);
     });
 });
+
 
 app.post("/save",function(req,res){
     console.log(req.body);
