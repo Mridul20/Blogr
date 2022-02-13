@@ -47,8 +47,11 @@ app.post("/save",function(req,res){
 app.get("/search",function(req,res){
     res.render("search");
 })
-app.get("/login",function(req,res){
+app.get("/loginpage",function(req,res){
     res.render("login");
+})
+app.get("/registerpage",function(req,res){
+    res.render("register");
 })
 app.listen("3000",function(){
     console.log("Server started at port 3000");
