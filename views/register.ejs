@@ -2,7 +2,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Stackfindover: Sign in</title>
+  <title>Sign Up</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -44,13 +44,25 @@
       </div>
       <div class="box-root padding-top--24 flex-flex flex-direction--column" style="flex-grow: 1; z-index: 9;">
         <div class="box-root padding-top--48 padding-bottom--24 flex-flex flex-justifyContent--center">
-          <h1><a href="http://blog.stackfindover.com/" rel="dofollow">Blogr</a></h1>
+          <h1><a href="/" rel="dofollow">Blogr</a></h1>
         </div>
         <div class="formbg-outer">
           <div class="formbg">
             <div class="formbg-inner padding-horizontal--48">
               <span class="padding-bottom--15">Sign up to create your account</span>
-              <form id="stripe-login">
+              <form method = "POST" action = "/register" id="stripe-login">
+                <div class="field padding-bottom--24">
+                  <label for="firstname">First Name</label>
+                  <input type="text" name="firstname">
+                </div>
+                <div class="field padding-bottom--24">
+                  <label for="lastname">Last Name</label>
+                  <input type="text" name="lastname">
+                </div>
+                <div class="field padding-bottom--24">
+                  <label for="username">Username</label>
+                  <input type="text" name="username">
+                </div>
                 <div class="field padding-bottom--24">
                   <label for="email">Email</label>
                   <input type="email" name="email">
@@ -63,6 +75,15 @@
                     </div> -->
                   </div>
                   <input type="password" name="password">
+                </div>
+                <div class="field padding-bottom--24">
+                  <div class="grid--50-50">
+                    <label for="password1"> Confirm Password</label>
+                    <!-- <div class="reset-pass">
+                      <a href="#">Forgot your password?</a>
+                    </div> -->
+                  </div>
+                  <input type="password" name="password1">
                 </div>
                 <!-- <div class="field field-checkbox padding-bottom--24 flex-flex align-center">
                   <label for="checkbox">

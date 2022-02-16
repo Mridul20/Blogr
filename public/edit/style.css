@@ -2088,3 +2088,16 @@ section {
 .btn:hover{
   background:rgb(17, 170, 17);
 }
+
+
+.blog-title {
+  padding: 0.5em 0;
+  margin: 0;
+  margin-bottom: -0.9em;
+  line-height: 1.5em;
+  outline: none;
+  border: 0;
+  font-size: 36px;
+  max-width: 100%;
+  width: 100%;
+}

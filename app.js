@@ -2,10 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
-
-app.listen("3000", function () {
-  console.log("Server started at port 3000");
-});
+const { use } = require("express/lib/application");
 
 app.use(express.static("public"));
 app.use(express.json({ limit: "1mb" }));
@@ -21,7 +18,39 @@ const blogSchema = {
   tag: Array,
 };
 
+const userSchema = {
+  username : {
+    type : String,
+    required : true,
+  },
+  firstName : {
+    type : String,
+    required : true,
+  },
+  lastName : {
+    type : String,
+    required : true,
+  },
+  email : {
+    type : String,
+    required : true,
+  },
+  password : {
+    type : String,
+    required : true,
+  },
+}
 const Blog = mongoose.model("Blog", blogSchema);
+const User = mongoose.model("User",userSchema);
+
+
+
+const validateEmail = (email) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+};
+
 
 app.get("/", function (req, res) {
   res.render("home");
@@ -52,4 +81,34 @@ app.post("/saveblogdata", function (req, res) {
 
 app.post("/search", function (req, res) {
   console.log(req.body);
+});
+
+app.post("/register",function(req,res){
+  console.log(req.body);
+  var username = req.body.username;
+  var firstname = req.body.firstname;
+  var lastname = req.body.lastname;
+  var email = req.body.email;
+  var password = req.body.password;
+  var password1 = req.body.password1;
+
+  if(password != password1)
+    res.send("Password do not match");
+  if(!validateEmail(email))
+    res.send("Invalid Mail");
+  User.find({username : username},function(err,result){
+      console.log(result);
+  });
+  var newUser = new User({
+    username : username,
+    firstName : firstname,
+    lastName : lastname,
+    email : email,
+    password : password
+  });
+  newUser.save();
+  res.redirect("/");
+});
+app.listen("3000", function () {
+  console.log("Server started at port 3000");
 });
