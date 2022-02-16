@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="content/style.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <meta content="" name="description">
 
     <meta content="" name="keywords">
   
     <!-- Favicons -->
-    <link href="content/img/favicon.png" rel="icon">
-    <link href="content/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="img/favicon.png" rel="icon">
+    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
   
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
   
     <!-- Vendor CSS Files -->
-    <link href="content/vendor/aos/aos.css" rel="stylesheet">
-    <link href="content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="content/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="content/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="content/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="content/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="vendor/aos/aos.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <title>Editing</title>
 </head>
 <body>
@@ -31,7 +31,7 @@
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
       <a href="index.html" class="logo d-flex align-items-center">
-        <img src="content/img/logo.png" alt="">
+        <img src="img/logo.png" alt="">
         <span>Blogr</span>
       </a>
 
@@ -83,15 +83,17 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
 
     <section id = "secid" >
-        <div id="editorjs">
-          <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog"></input>
-          <div  onclick="savedata()" class="btn">Save</div>
-          <!-- <button id = "savebut" onclick="savedata()">SAVE</button> -->
-        </div> 
+        
+          <form action="/" method="GET">
+            <div id="editorjs">
+            <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog">
+            <button type = "submit" onclick="savedata()" class="btn">Save</button>
+            </div>
+          </form>
     </section>
 
-    <script src = "content/texteditor.js"></script>
-    <script src = "content/main.js"></script>    
+    <script src = "editor.js"></script>
+    <script src = "main.js"></script>    
 
     
 </body>

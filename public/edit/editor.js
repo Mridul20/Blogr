@@ -3,12 +3,6 @@ const editor = new EditorJS({
         header: Header,
         raw: RawTool,
         image: SimpleImage, 
-        // linkTool: {
-        //     class: LinkTool,
-        //     config: {
-        //       endpoint: 'http://localhost:3000/fetchUrl', // Your backend endpoint for url data fetching,
-        //     }
-        //   },
           checklist: {
             class: Checklist,
             inlineToolbar: true,
@@ -31,19 +25,17 @@ const editor = new EditorJS({
                 alert("Enter Blog Title");
                 return; 
             }
-            fetch('http://localhost:3000/save', {
+            fetch('/saveblogdata',{
                 method: 'POST',
-                mode: 'cors', 
-                body: JSON.stringify({
-                    title: document.getElementById("title").value,
-                    blogdata: JSON.stringify(output),
-                    // id: "{{id}}",
-                    // tags: $("#blog-tags").val()
-                }),
                 headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
+                  'Content-Type':'application/json'
                 },
+                body: JSON.stringify({
+                  title: document.getElementById("title").value,
+                  blogdata: JSON.stringify(output),
+                  // id: "{{id}}",
+                  // tags: $("#blog-tags").val()
+              }),
             })
                 // .then((response) => {
                 //     let notificationDiv = $(".notification-container .notification-s");
