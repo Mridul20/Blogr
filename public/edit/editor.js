@@ -1,4 +1,5 @@
 const editor = new EditorJS({
+    placeholder: 'Let`s write an awesome story!',
     tools: {
         header: Header,
         raw: RawTool,
@@ -13,7 +14,9 @@ const editor = new EditorJS({
           },  
           embed: Embed,
           quote: Quote,
-    }
+    },
+    // autofocus: true
+    // readOnly: true
   });
 
 

@@ -2,14 +2,17 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
+const bcrypt = require('bcryptjs');
 const { use } = require("express/lib/application");
+const url = require('url');
+
 
 app.use(express.static("public"));
 app.use(express.json({ limit: "1mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogDB");
+mongoose.connect("mongodb+srv://admin:admin@cluster0.yavmq.mongodb.net/blogDB");
 
 const blogSchema = {
   id: String,
@@ -50,7 +53,7 @@ const validateEmail = (email) => {
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
 };
-
+const salt = bcrypt.genSaltSync(10);
 
 app.get("/", function (req, res) {
   res.render("home");
@@ -91,24 +94,95 @@ app.post("/register",function(req,res){
   var email = req.body.email;
   var password = req.body.password;
   var password1 = req.body.password1;
+  var passwordhash = bcrypt.hashSync(password, salt);
 
   if(password != password1)
-    res.send("Password do not match");
+    return res.redirect(url.format({
+      pathname:"/register",
+      query: {
+        "error": "Passwords do not match",
+      }
+    }));
+
   if(!validateEmail(email))
-    res.send("Invalid Mail");
+  return res.redirect(url.format({
+      pathname:"/register",
+      query: {
+        "error": "Invalid Email",
+      }
+    }));
+
   User.find({username : username},function(err,result){
-      console.log(result);
+      if(result.length > 0)
+      return res.redirect(url.format({
+          pathname:"/register",
+          query: {
+            "error": "Username Exists",
+          }
+        }));      
   });
+
+  User.find({email : email},function(err,result){
+    if(result.length > 0)
+    return res.redirect(url.format({
+        pathname:"/register",
+        query: {
+          "error": "Email Exists",
+        }
+      }));      
+});
   var newUser = new User({
     username : username,
     firstName : firstname,
     lastName : lastname,
     email : email,
-    password : password
+    password : passwordhash
   });
   newUser.save();
-  res.redirect("/");
+
+  return res.redirect(url.format({
+    pathname:"/login",
+    query: {
+      // "login": true,
+      "username" : username   
+    }
+  }));   
 });
+
+app.post("/login",function(req,res){
+  console.log(req.body);
+  var username = req.body.username;
+  var password = req.body.password;
+  
+
+  User.find({username : username},function(err,result){
+
+  
+    if(result.length == 0)
+      return res.redirect(url.format({
+        pathname:"/login",
+        query: {
+          "err": "Invalid Username",
+        }
+      }));
+    if(!bcrypt.compareSync(password, result[0].password))
+      return res.redirect(url.format({
+        pathname:"/login",
+        query: {
+          "err": "Invalid Password",
+        }
+      }));   
+    console.log("hello");
+    return res.redirect(url.format({
+      pathname:"/",
+      query: {
+        "login" : true,
+        "username" : username
+      }
+    }));  
+  });
+});
+
 app.listen("3000", function () {
   console.log("Server started at port 3000");
 });
