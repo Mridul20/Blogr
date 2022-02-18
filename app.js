@@ -104,7 +104,14 @@ app.post("/saveblogdata", function (req, res) {
 });
 
 app.post("/search", function (req, res) {
-  console.log(req.body);
+  var tagquery = req.body.search;
+
+  
+  Blog.find({$or:[{tag: tagquery} ,{title : tagquery }]},function(err,result){
+      console.log(result);
+  });
+  res.send("a");
+  // console.log(req.body);
 });
 
 app.post("/register",function(req,res){
@@ -164,7 +171,6 @@ app.post("/register",function(req,res){
   return res.redirect(url.format({
     pathname:"/login",
     query: {
-      // "login": true,
       "username" : username   
     }
   }));   
