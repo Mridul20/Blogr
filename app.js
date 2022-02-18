@@ -47,11 +47,7 @@ const userSchema = {
     type: String,
     required: true,
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  fullname: {
     type: String,
     required: true,
   },
@@ -105,66 +101,65 @@ app.post("/saveblogdata", function (req, res) {
 
 
 
-app.post("/register", function (req, res) {
+app.post("/register",function(req,res){
   console.log(req.body);
   var username = req.body.username;
-  var firstname = req.body.firstname;
-  var lastname = req.body.lastname;
+  var fullname = req.body.name;
   var email = req.body.email;
   var password = req.body.password;
   var password1 = req.body.password1;
   var passwordhash = bcrypt.hashSync(password, salt);
 
-  if (password != password1)
+  if(password != password1)
     return res.redirect(url.format({
-      pathname: "/register",
+      pathname:"/register",
       query: {
         "error": "Passwords do not match",
       }
     }));
 
-  if (!validateEmail(email))
-    return res.redirect(url.format({
-      pathname: "/register",
+  if(!validateEmail(email))
+  return res.redirect(url.format({
+      pathname:"/register",
       query: {
         "error": "Invalid Email",
       }
     }));
 
-  User.find({ username: username }, function (err, result) {
-    if (result.length > 0)
+  User.find({username : username},function(err,result){
+      if(result.length > 0)
       return res.redirect(url.format({
-        pathname: "/register",
-        query: {
-          "error": "Username Exists",
-        }
-      }));
+          pathname:"/register",
+          query: {
+            "error": "Username Exists",
+          }
+        }));      
   });
 
-  User.find({ email: email }, function (err, result) {
-    if (result.length > 0)
-      return res.redirect(url.format({
-        pathname: "/register",
+  User.find({email : email},function(err,result){
+    if(result.length > 0)
+    return res.redirect(url.format({
+        pathname:"/register",
         query: {
           "error": "Email Exists",
         }
-      }));
-  });
+      }));      
+});
   var newUser = new User({
-    username: username,
-    firstName: firstname,
-    lastName: lastname,
-    email: email,
-    password: passwordhash
+    username : username,
+    fullname : fullname,
+    email : email,
+    password : passwordhash
   });
   newUser.save();
 
   return res.redirect(url.format({
-    pathname: "/login",
+    pathname:"/login",
     query: {
-      "username": username
+      // "login": true,
+      "username" : username   
     }
-  }));
+  }));   
 });
 
 app.post("/login", function (req, res) {
