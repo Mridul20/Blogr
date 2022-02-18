@@ -1,190 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <title>Blogr</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <!-- Favicons -->
-    <link href="img/favicon.png" rel="icon" />
-    <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <title>Blogr</title>
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-      rel="stylesheet"
-    />
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon" />
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
 
-    <!-- Vendor CSS Files -->
-    <link href="vendor/aos/aos.css" rel="stylesheet" />
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <link href="vendor/remixicon/remixicon.css" rel="stylesheet" />
-    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet" />
 
-    <link href="style.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <!-- CSS only -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-    <!-- JavaScript Bundle with Popper -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
+  <!-- Vendor CSS Files -->
+  <link href="vendor/aos/aos.css" rel="stylesheet" />
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <link href="vendor/remixicon/remixicon.css" rel="stylesheet" />
+  <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
 
-    <script>
-      const data = {
-        dp: [
-          {
-            topic: "blogr",
-            risk: "high",
-            image:
-              "https://static.remove.bg/remove-bg-web/3a7401e33933f092e5fea5ef460b0cfd79d85fe8/assets/start_remove-c851bdf8d3127a24e2d137a55b1b427378cd17385b01aec6e59d5d4b5f39d2ec.png",
-          },
-        ],
-        dp1: [
-          {
-            topic: "bfs",
-            risk: "easy",
-            image:
-              "https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg",
-          },
-          {
-            topic: "blogr",
-            risk: "high",
-            image:
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf0txhKFE-5neWCT4R1lVDr-u6xIs74iRTaQ_Bbg5LLnBf7GhZhSIpONXAnwpuL1hBbWY&usqp=CAU",
-          },
-        ],
-        dp2: [
-          {
-            topic: "dfs",
-            risk: "ok ok",
-            image:
-              "https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg",
-          },
-        ],
-      };
+  <link href="style.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</head>
 
-      function showdata(op) {
-        var s1 = document.getElementById("show");
+<body>
 
-        var html = "";
-        for (const key in data) {
-          if (key == op) {
-            console.log(key, "mil gya");
-            for (const key1 in data[key]) {
-              console.log(data[key][key1]);
-              html += `
-                        <img src=${data[key][key1].image} class="card-img-top" alt="...">
-                        <div class="card-body">
-                          <h5 class="card-title">${data[key][key1].topic}</h5>
-                          <p class="card-text">Risk=${data[key][key1].risk} .</p>
-                          <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                      
-                        `;
-            }
-          }
-        }
-        s1.innerHTML = html;
-      }
+  <!-- start Header -->
+  <header id="header" class="header fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-      function search12(e) {
-        console.log("sdada");
-        var s1 = document.getElementById("search1").value;
-        console.log(s1);
-        event.preventDefault();
-        showdata(s1);
-      }
-    </script>
-  </head>
+      <a href="/" class="logo d-flex align-items-center">
+        <img src="img/logo.png" alt="">
+        <span>Blogr</span>
+      </a>
 
-  <body>
-    <header id="header" class="header fixed-top">
-      <div
-        class="container-fluid container-xl d-flex align-items-center justify-content-between"
-      >
-        <a href="index.html" class="logo d-flex align-items-center">
-          <img src="img/logo.png" alt="" />
-          <span>Blogr</span>
-        </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#search">Search</a></li>
+          <li><a class="nav-link scrollto" href="features">Features</a></li>
+          <li><a class="nav-link scrollto" href="#team">Team</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="getstarted scrollto" href="register">Login/Register</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
 
-        <nav id="navbar" class="navbar">
-          <ul>
-            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-            <li><a class="nav-link scrollto" href="#about">About</a></li>
-            <li><a class="nav-link scrollto" href="#services">Services</a></li>
-            <li>
-              <a class="nav-link scrollto" href="#portfolio">Portfolio</a>
-            </li>
-            <li><a class="nav-link scrollto" href="#team">Team</a></li>
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="loginpage">login</a></li>
-            <li class="dropdown">
-              <a href="#"
-                ><span>Drop Down</span> <i class="bi bi-chevron-down"></i
-              ></a>
-              <ul>
-                <li><a href="#">Drop Down 1</a></li>
-                <li class="dropdown">
-                  <a href="#"
-                    ><span>Deep Drop Down</span>
-                    <i class="bi bi-chevron-right"></i
-                  ></a>
-                  <ul>
-                    <li><a href="#">Deep Drop Down 1</a></li>
-                    <li><a href="#">Deep Drop Down 2</a></li>
-                    <li><a href="#">Deep Drop Down 3</a></li>
-                    <li><a href="#">Deep Drop Down 4</a></li>
-                    <li><a href="#">Deep Drop Down 5</a></li>
-                  </ul>
-                </li>
-                <li><a href="#">Drop Down 2</a></li>
-                <li><a href="#">Drop Down 3</a></li>
-                <li><a href="#">Drop Down 4</a></li>
-              </ul>
-            </li>
-            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-            <li>
-              <a class="getstarted scrollto" href="#about">Get Started</a>
-            </li>
-          </ul>
-          <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-        <!-- .navbar -->
-      </div>
-    </header>
-    <!-- End Header -->
-    <section class="container" style="margin-top: 50px">
-      <form>
-        <input id="search1" type="text" placeholder="Search.." name="search" />
-        <button type="submit" onclick="search12()">
-          <i class="fa fa-search"></i>
-        </button>
-      </form>
-    </section>
-    <section id="recent-blog-posts" class="recent-blog-posts">
-      <div class="container" data-aos="fade-up">
-        <header class="section-header">
-          <h2>Blog</h2>
-          <p>Recent posts form our Blog</p>
-        </header>
+    </div>
+  </header><!-- End Header -->
 
-        <div class="row">
+
+
+  <section id="recent-blog-posts" class="recent-blog-posts">
+    <div class="container" data-aos="fade-up" style="margin-top:50px">
+      <header class="section-header">
+        <h2>Blog</h2>
+        <p>Recent posts form our Blog</p>
+      </header>
+
+      <div class="row" id="row">
+        <% result.forEach(function(item){ %>
+
           <div class="col-lg-4">
             <div class="post-box">
               <div class="post-img">
@@ -195,66 +85,23 @@
                 Eum ad dolor et. Autem aut fugiat debitis voluptatem
                 consequuntur sit
               </h3>
-              <a href="blog-single.html" class="readmore stretched-link mt-auto"
-                ><span>Read More</span><i class="bi bi-arrow-right"></i
-              ></a>
+              <a href="blog-single.html" class="readmore stretched-link mt-auto"><span>Read More</span><i
+                  class="bi bi-arrow-right"></i></a>
             </div>
           </div>
-
-          <div class="col-lg-4">
-            <div class="post-box">
-              <div class="post-img">
-                <img src="img/blog/blog-2.jpg" class="img-fluid" alt="" />
-              </div>
-              <span class="post-date">Fri, August 28</span>
-              <h3 class="post-title">
-                Et repellendus molestiae qui est sed omnis voluptates magnam
-              </h3>
-              <a href="blog-single.html" class="readmore stretched-link mt-auto"
-                ><span>Read More</span><i class="bi bi-arrow-right"></i
-              ></a>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="post-box">
-              <div class="post-img">
-                <img src="img/blog/blog-3.jpg" class="img-fluid" alt="" />
-              </div>
-              <span class="post-date">Mon, July 11</span>
-              <h3 class="post-title">
-                Quia assumenda est et veritatis aut quae
-              </h3>
-              <a href="blog-single.html" class="readmore stretched-link mt-auto"
-                ><span>Read More</span><i class="bi bi-arrow-right"></i
-              ></a>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="post-box">
-              <div class="post-img">
-                <img src="img/blog/blog-3.jpg" class="img-fluid" alt="" />
-              </div>
-              <span class="post-date">Mon, July 11</span>
-              <h3 class="post-title">
-                Quia assumenda est et veritatis aut quae
-              </h3>
-              <a href="blog-single.html" class="readmore stretched-link mt-auto"
-                ><span>Read More</span><i class="bi bi-arrow-right"></i
-              ></a>
-            </div>
-          </div>
-        </div>
+          <% }) %>
       </div>
-    </section>
-    <!-- End Recent Blog Posts Section -->
-    <script src="vendor/purecounter/purecounter.js"></script>
-    <script src="vendor/aos/aos.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="vendor/php-email-form/validate.js"></script>
-    <script src="main.js"></script>
-  </body>
+    </div>
+  </section>
+  <!-- End Recent Blog Posts Section -->
+  <script src="vendor/purecounter/purecounter.js"></script>
+  <script src="vendor/aos/aos.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="vendor/php-email-form/validate.js"></script>
+  <script src="main.js"></script>
+</body>
+
 </html>
