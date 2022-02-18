@@ -2039,3 +2039,8 @@ section {
 body{
   color : black;
 }
+
+.pd{
+  padding-top: 3%;
+  padding-bottom: 3%;
+}

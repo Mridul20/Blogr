@@ -11,7 +11,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="home/img/composition.png" rel="icon">
+  <link href="home/img/logo.png" rel="icon">
   <link href="home/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -32,9 +32,10 @@
     integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
   <!-- Template Main CSS File -->
+  <link href="home/searchbar.css" rel="stylesheet">
   <link href="home/style.css" rel="stylesheet">
   <link href="home/search_button.css" rel="stylesheet">
-
+  
   <!-- =======================================================
   * Template Name: Blogr - v1.9.0
   * Template URL: https://bootstrapmade.com/Blogr-bootstrap-startup-template/
@@ -44,28 +45,6 @@
 </head>
 
 <body>
-  <header id="header" class="header fixed-top">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
-      <a href="/" class="logo d-flex align-items-center">
-        <img src="home/img/logo.png" alt="">
-        <span>Blogr</span>
-      </a>
-
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#search">Search</a></li>
-          <li><a class="nav-link scrollto" href="features">Features</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="register">Login/Register</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-    </div>
-  </header><!-- End Header -->
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
@@ -89,7 +68,6 @@
 
     </div>
   </header><!-- End Header -->
-
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="hero d-flex align-items-center">
 
@@ -118,10 +96,22 @@
 
   <main id="main">
     <!-- ======= About Section ======= -->
-    <section id="search" class="about" style="height: 100vhv;">
+    <section id="search" class="about">
       <div class="container h-100">
 
-        <form action="/search" method="POST">
+        <div class="s129" data-aos="fade-up">
+          <form action="/search" method="POST">
+            <div class="inner-form">
+              <div class="input-field">
+                <button class="btn-search" type="submit">
+                  <img src="home/img/bar.png" width = 60% alt="">
+                </button>
+                <input id="search" type="text" name="search" placeholder="What are you looking for ....." >
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- <form action="/search" method="POST">
           <div class="d-flex justify-content-center h-100">
             <div class="searchbar">
               <input class="search_input" id="search1" type="text" name="search" placeholder="Search..." required>
@@ -129,7 +119,7 @@
             </div>
           </div>
 
-        </form> 
+        </form>  -->
       </div>
     <!-- ======= Recent Blog Posts Section ======= -->
     <section id="recent-blog-posts" class="recent-blog-posts">
