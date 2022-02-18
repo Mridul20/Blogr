@@ -2057,3 +2057,11 @@ body{
 .hvr:hover {
   background-color: #79A8C2;
 }
+
+.ctr {
+  /* align-items: center; */
+  text-align: center;
+}
+.pd {
+  padding-top: 3.5%;
+}
