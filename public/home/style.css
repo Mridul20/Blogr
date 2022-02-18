@@ -225,7 +225,7 @@ section {
 }
 .navbar .getstarted:hover, .navbar .getstarted:focus:hover {
   color: #fff;
-  background: #5969f3;
+  background: #79A8C2;
 }
 .navbar .dropdown ul {
   display: block;
@@ -1035,7 +1035,7 @@ section {
   line-height: 0;
 }
 .portfolio .portfolio-wrap .portfolio-links a:hover {
-  background: #5969f3;
+  background: #79A8C2;
 }
 .portfolio .portfolio-wrap:hover img {
   transform: scale(1.1);
@@ -1445,7 +1445,7 @@ section {
   border-radius: 4px;
 }
 .contact .php-email-form button[type=submit]:hover {
-  background: #5969f3;
+  background: #79A8C2;
 }
 @-webkit-keyframes animate-loading {
   0% {
@@ -1536,7 +1536,7 @@ section {
   border-radius: 4px;
 }
 .blog .entry .entry-content .read-more a:hover {
-  background: #5969f3;
+  background: #79A8C2;
 }
 .blog .entry .entry-content h3 {
   font-size: 22px;
@@ -1931,7 +1931,7 @@ section {
   border-radius: 4px;
 }
 .footer .footer-newsletter form input[type=submit]:hover {
-  background: #5969f3;
+  background: #79A8C2;
 }
 .footer .footer-top {
   background: white url(../img/footer-bg.png) no-repeat right top;
@@ -2052,4 +2052,8 @@ body{
 .team-member h4 {
   margin-top: 1.5rem;
   margin-bottom: 0;
+}
+
+.hvr:hover {
+  background-color: #79A8C2;
 }
