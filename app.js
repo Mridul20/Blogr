@@ -1,18 +1,64 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const app = express();
 const mongoose = require("mongoose");
-const bcrypt = require('bcryptjs');
-const { use } = require("express/lib/application");
 const url = require('url');
 const { spawn } = require("child_process");
+const session = require("express-session");
+const passport = require("passport");
+const passporLocalMongoose = require("passport-local-mongoose");
+
+
+const app = express();
 
 app.use(express.static("public"));
 app.use(express.json({ limit: "1mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-mongoose.connect("mongodb+srv://admin:admin@cluster0.yavmq.mongodb.net/blogDB");
+  app.use(session({
+    secret : "Mridul Mittal",
+    resave : false,
+    saveUninitialized : false
+  }));
+
+app.use(passport.initialize());
+app.use(passport.session()); 
+
+
+
+mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogDB");
+
+const blogSchema = {
+  id: String,
+  title: String,
+  body: String,
+  tag: Array,
+};
+
+const userSchema = new mongoose.Schema({
+  fullname: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+});
+
+userSchema.plugin(passporLocalMongoose);
+  
+const Blog = mongoose.model("Blog", blogSchema);
+const User = mongoose.model("User", userSchema);
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+const validateEmail = (email) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+};
 
 
 app.get('/python', (req, res) => {
@@ -35,45 +81,15 @@ app.get('/python', (req, res) => {
 
 })
 
-const blogSchema = {
-  id: String,
-  title: String,
-  body: String,
-  tag: Array,
-};
-
-const userSchema = {
-  username: {
-    type: String,
-    required: true,
-  },
-  fullname: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-}
-const Blog = mongoose.model("Blog", blogSchema);
-const User = mongoose.model("User", userSchema);
-
-
-
-const validateEmail = (email) => {
-  return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-};
-const salt = bcrypt.genSaltSync(10);
 
 app.get("/", function (req, res) {
-  res.render("home");
+  if(req.isAuthenticated()) {
+    res.render("home",{ login: true,username: req.user.username });
+  }
+  else {
+    res.render("home",{ login: false });
+  }
+   
 });
 
 app.get("/login", function (req, res) {
@@ -103,97 +119,131 @@ app.post("/saveblogdata", function (req, res) {
 
 app.post("/register",function(req,res){
   console.log(req.body);
-  var username = req.body.username;
-  var fullname = req.body.name;
-  var email = req.body.email;
-  var password = req.body.password;
-  var password1 = req.body.password1;
-  var passwordhash = bcrypt.hashSync(password, salt);
 
-  if(password != password1)
-    return res.redirect(url.format({
-      pathname:"/register",
-      query: {
-        "error": "Passwords do not match",
-      }
-    }));
+  const usr = new User({
+    username : req.body.username,
+    fullname : req.body.name,
+    email : req.body.email
+  })
 
-  if(!validateEmail(email))
-  return res.redirect(url.format({
-      pathname:"/register",
-      query: {
-        "error": "Invalid Email",
-      }
-    }));
-
-  User.find({username : username},function(err,result){
-      if(result.length > 0)
+  User.register(usr,req.body.password,function(err,regUser){
+    if(err) {
+      console.log(err);
       return res.redirect(url.format({
-          pathname:"/register",
-          query: {
-            "error": "Username Exists",
-          }
-        }));      
-  });
-
-  User.find({email : email},function(err,result){
-    if(result.length > 0)
-    return res.redirect(url.format({
         pathname:"/register",
         query: {
-          "error": "Email Exists",
+          "error": err,
         }
-      }));      
-});
-  var newUser = new User({
-    username : username,
-    fullname : fullname,
-    email : email,
-    password : passwordhash
-  });
-  newUser.save();
-
-  return res.redirect(url.format({
-    pathname:"/login",
-    query: {
-      // "login": true,
-      "username" : username   
+      }));
     }
-  }));   
+    else {
+      passport.authenticate("local")(req,res,function(){
+        req.login(regUser, function(err) {
+          if (err) {
+            console.log(err);
+            return res.redirect(url.format({
+              pathname:"/register",
+              query: {
+                "error": err,
+              }
+            }))             
+          }
+          return res.redirect("/"); 
+        });
+      });
+    }
+  });
+//   var username = req.body.username;
+//   var fullname = req.body.name;
+//   var email = req.body.email;
+//   var password = req.body.password;
+//   var password1 = req.body.password1;
+
+
+//   if(password != password1)
+//     return res.redirect(url.format({
+//       pathname:"/register",
+//       query: {
+//         "error": "Passwords do not match",
+//       }
+//     }));
+
+//   if(!validateEmail(email))
+//   return res.redirect(url.format({
+//       pathname:"/register",
+//       query: {
+//         "error": "Invalid Email",
+//       }
+//     }));
+
+//   User.find({username : username},function(err,result){
+//       if(result.length > 0)
+//       return res.redirect(url.format({
+//           pathname:"/register",
+//           query: {
+//             "error": "Username Exists",
+//           }
+//         }));      
+//   });
+
+//   User.find({email : email},function(err,result){
+//     if(result.length > 0)
+//     return res.redirect(url.format({
+//         pathname:"/register",
+//         query: {
+//           "error": "Email Exists",
+//         }
+//       }));      
+// });
+//   var newUser = new User({
+//     username : username,
+//     fullname : fullname,
+//     email : email,
+//     password : passwordhash
+//   });
+//   newUser.save();
+
+//   return res.redirect(url.format({
+//     pathname:"/login",
+//     query: {
+//       // "login": true,
+//       "username" : username   
+//     }
+//   }));   
 });
 
 app.post("/login", function (req, res) {
   console.log(req.body);
-  var username = req.body.username;
-  var password = req.body.password;
+//   var username = req.body.username;
+//   var password = req.body.password;
 
 
-  User.find({ username: username }, function (err, result) {
+//   User.find({ username: username }, function (err, result) {
 
 
-    if (result.length == 0)
-      return res.redirect(url.format({
-        pathname: "/login",
-        query: {
-          "err": "Invalid Username",
-        }
-      }));
-    if (!bcrypt.compareSync(password, result[0].password))
-      return res.redirect(url.format({
-        pathname: "/login",
-        query: {
-          "err": "Invalid Password",
-        }
-      }));
-    console.log("hello");
-    return res.redirect(url.format({
-      pathname: "/",
-      query: {
-        "login": true,
-        "username": username
-      }
-    }));
-  });
+//     if (result.length == 0)
+//       return res.redirect(url.format({
+//         pathname: "/login",
+//         query: {
+//           "err": "Invalid Username",
+//         }
+//       }));
+//     if (!bcrypt.compareSync(password, result[0].password))
+//       return res.redirect(url.format({
+//         pathname: "/login",
+//         query: {
+//           "err": "Invalid Password",
+//         }
+//       }));
+//     console.log("hello");
+//     return res.redirect(url.format({
+//       pathname: "/",
+//       query: {
+//         "login": true,
+//         "username": username
+//       }
+//     }));
+//   });
 });
 app.get("/search", function (req, res) {
   let tagquery = req.query.username;
