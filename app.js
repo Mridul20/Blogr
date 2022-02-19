@@ -82,6 +82,7 @@ app.get('/python', (req, res) => {
 })
 
 
+
 app.get("/", function (req, res) {
   if(req.isAuthenticated()) {
     res.render("home",{ login: true,username: req.user.username });

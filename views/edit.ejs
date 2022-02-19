@@ -26,48 +26,31 @@
     <title>Editing</title>
 </head>
 <body>
-  <!-- ======= Header ======= -->
+  <!-- header-->
   <header id="header" class="header fixed-top">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-
-      <a href="index.html" class="logo d-flex align-items-center">
-        <img src="img/logo.png" alt="">
+    <div
+      class="container-fluid container-xl d-flex align-items-center justify-content-between"
+    >
+      <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
+        <img src="img/logo.png" alt="" />
         <span>Blogr</span>
       </a>
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">content</a></li>
-          <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#services">Services</a></li>
-          <li><a class="nav-link scrollto" href="#portfolio">Portfolio</a></li>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#search">Search</a></li>
+          <li><a class="nav-link scrollto" href="#features">Features</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="#about">Get Started</a></li>
+          <li><a class="getstarted scrollto" href="register" style = "text-decoration: none;">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
+      </nav>
+      <!-- .navbar -->
     </div>
-  </header><!-- End Header -->
+  </header>
+  <!-- End Header -->
 
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
@@ -81,19 +64,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
-    <script>
-      var loadFile = function(event) {
-        var image = document.getElementById('output');
-        image.src = URL.createObjectURL(event.target.files[0]);
-      };
-      </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
     <section id = "secid" >
         
           <form action="/" method="GET">
-            <div id="editorjs">
-              <p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;"></p>
-              <p><label for="file" style="cursor: pointer;">Upload Cover Image</label></p>
-              <p><img id="output" width="200" /></p>
+            <div class="switch-button">
+              <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
+              <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
+            </div>
+            <div id="editorjs" class = "des">
+              <div class="container py-5 ">
+                <div class="image-area mt-4 crp"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block "></div>
+                <div class="row py-4 bardes" style = "margin: 0 auto;">
+                  <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
+                  <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i>Choose file</label>
+                </div>
+            </div>
+              <!-- <div class ="imgdes">
+                <p><img id="output" width = "100%"></p>
+                <p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;"></p>
+                <p ><label for="file" style="cursor: pointer;">Upload Cover Image</label></p>
+                
+              </div> -->
+
               <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
             <!-- <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog"> -->
               </div>
@@ -107,72 +101,48 @@
     <script src = "main.js"></script>    
 
 
-    <footer id="footer" class="footer">  
-      <div class="footer-top">
-        <div class="container">
-          <div class="row gy-4">
-            <div class="col-lg-5 col-md-12 footer-info">
-              <a href="index.html" class="logo d-flex align-items-center">
-                <img src="home/img/logo.png" alt="">
-                <span>FlexStart</span>
-              </a>
-              <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies
-                darta donna mare fermentum iaculis eu non diam phasellus.</p>
-              <div class="social-links mt-3">
-                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-              </div>
-            </div>
-  
-            <div class="col-lg-2 col-6 footer-links">
-              <h4>Useful Links</h4>
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Privacy policy</a></li>
-              </ul>
-            </div>
-  
-            <div class="col-lg-2 col-6 footer-links">
-              <h4>Our Services</h4>
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
-                <li><i class="bi bi-chevron-right"></i> <a href="#">Graphic Design</a></li>
-              </ul>
-            </div>
-  
-            <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-              <h4>Contact Us</h4>
-              <p>
-                A108 Adam Street <br>
-                New York, NY 535022<br>
-                United States <br><br>
-                <strong>Phone:</strong> +1 5589 55488 55<br>
-                <strong>Email:</strong> info@example.com<br>
-              </p>
-  
-            </div>
-  
+ <!-- ======= Footer ======= -->
+ <footer id="footer" class="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-5 col-md-12 footer-info">
+          <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
+            <img src="img/logo.png" alt="" />
+            <span>Blogr</span>
+          </a>
+          <p>
+            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget
+            nada terra videa magna derita valies darta donna mare fermentum
+            iaculis eu non diam phasellus.
+          </p>
+          <div class="social-links mt-3">
+            <a href="#" class="twitter"
+              ><i class="bi bi-twitter" style="color: black"></i
+            ></a>
+            <a href="#" class="facebook"
+              ><i class="bi bi-facebook" style="color: black"></i
+            ></a>
+            <a href="#" class="instagram"
+              ><i class="bi bi-instagram" style="color: black"></i
+            ></a>
+            <a href="#" class="linkedin"
+              ><i class="bi bi-linkedin" style="color: black"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="col-lg-7 col-6 footer-links">
+          <div class="copyright">
+            &copy; Copyright <strong><span>Blogr</span></strong
+            >. All Rights Reserved
           </div>
         </div>
       </div>
-  
-      <div class="container">
-        <div class="copyright">
-          &copy; Copyright <strong><span>FlexStart</span></strong>. All Rights Reserved
-        </div>
-        <div class="credits">
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-      </div>
-    </footer><!-- End Footer -->
+    </div>
+  </div>
+</footer>
+<!-- End Footer -->
     
 </body>
 </html>
