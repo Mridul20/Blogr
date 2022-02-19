@@ -98,10 +98,18 @@
             </h2>
             <div data-aos="fade-up" data-aos-delay="600">
               <div class="text-center text-lg-start">
-                <a
+                <% if(login) { %> 
+                  <a
                   href="/edit"
                   class="getstarted btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center hvr"
                 >
+                <% } else { %>
+                  <a
+                  href="/login"
+                  class="getstarted btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center hvr"
+                >
+                <% } %>
+
                   <span>Start Writing</span>
                   <i class="bi bi-arrow-right"></i>
                 </a>

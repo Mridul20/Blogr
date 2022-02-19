@@ -98,6 +98,10 @@ app.get("/login", function (req, res) {
 app.get("/register", function (req, res) {
   res.render("register");
 });
+app.get("/logout",function(req,res){
+    req.logout();
+    res.redirect("/");
+});
 
 app.get("/edit", function (req, res) {
   res.render("edit");
@@ -152,98 +156,28 @@ app.post("/register",function(req,res){
         });
       });
     }
-  });
-//   var username = req.body.username;
-//   var fullname = req.body.name;
-//   var email = req.body.email;
-//   var password = req.body.password;
-//   var password1 = req.body.password1;
-
-
-//   if(password != password1)
-//     return res.redirect(url.format({
-//       pathname:"/register",
-//       query: {
-//         "error": "Passwords do not match",
-//       }
-//     }));
-
-//   if(!validateEmail(email))
-//   return res.redirect(url.format({
-//       pathname:"/register",
-//       query: {
-//         "error": "Invalid Email",
-//       }
-//     }));
-
-//   User.find({username : username},function(err,result){
-//       if(result.length > 0)
-//       return res.redirect(url.format({
-//           pathname:"/register",
-//           query: {
-//             "error": "Username Exists",
-//           }
-//         }));      
-//   });
-
-//   User.find({email : email},function(err,result){
-//     if(result.length > 0)
-//     return res.redirect(url.format({
-//         pathname:"/register",
-//         query: {
-//           "error": "Email Exists",
-//         }
-//       }));      
-// });
-//   var newUser = new User({
-//     username : username,
-//     fullname : fullname,
-//     email : email,
-//     password : passwordhash
-//   });
-//   newUser.save();
-
-//   return res.redirect(url.format({
-//     pathname:"/login",
-//     query: {
-//       // "login": true,
-//       "username" : username   
-//     }
-//   }));   
+  });  
 });
 
 app.post("/login", function (req, res) {
   console.log(req.body);
-//   var username = req.body.username;
-//   var password = req.body.password;
 
-
-//   User.find({ username: username }, function (err, result) {
-
-
-//     if (result.length == 0)
-//       return res.redirect(url.format({
-//         pathname: "/login",
-//         query: {
-//           "err": "Invalid Username",
-//         }
-//       }));
-//     if (!bcrypt.compareSync(password, result[0].password))
-//       return res.redirect(url.format({
-//         pathname: "/login",
-//         query: {
-//           "err": "Invalid Password",
-//         }
-//       }));
-//     console.log("hello");
-//     return res.redirect(url.format({
-//       pathname: "/",
-//       query: {
-//         "login": true,
-//         "username": username
-//       }
-//     }));
-//   });
+  const usr = new User({
+    username : req.body.username,
+    password : req.body.password,
+  })
+  req.login(usr, function(err) {
+    if (err) {
+      console.log(err);
+      return res.redirect(url.format({
+        pathname:"/login",
+        query: {
+          "error": err,
+        }
+      }))             
+    }
+    return res.redirect("/"); 
+  });
 });
 app.get("/search", function (req, res) {
   let tagquery = req.query.username;
