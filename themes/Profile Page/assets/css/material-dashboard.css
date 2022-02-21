@@ -17532,3 +17532,28 @@ pre[class*="language-"] {
     overflow: auto !important; } }
 
 /*# sourceMappingURL=material-dashboard.css.map */
+
+.pd {
+  padding: 5%;
+}
+
+.switch {
+  width: 10%;
+  margin: 2% 2% 2% auto;
+}
+
+.boyimg {
+  text-align: center;
+  /* width: 20%; */
+  margin: 5% auto 5%;
+
+}
+.imgt {
+  width: 18%;
+  border: 6px solid #dbdbdb;
+  border-radius: 100%;
+  padding: 1%;
+}
+.nm {
+  font-size: 2rem;
+}
