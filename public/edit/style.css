@@ -2162,15 +2162,16 @@ body{
   background: #b1cadc;
   border-radius: 30px;
   overflow: hidden;
-  width: 12%;
+  width: 9%;
+  height: 10%;
   text-align: center;
-  font-size: 100%;
+  font-size: 75%;
   letter-spacing: 1px;
   color: black;
   position: relative;
-  padding-right: 80px;
+  padding-right:4%;
   position: relative;
-  left : 80%;
+  left : 89%;
 }
 .switch-button:before {
   content: "Private";
@@ -2178,7 +2179,7 @@ body{
   top: 0;
   bottom: 0;
   right: 0;
-  width: 80%;
+  width: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2202,7 +2203,7 @@ body{
 }
 .switch-button-checkbox + .switch-button-label {
   position: relative;
-  padding: 15px 0;
+  padding: 8px 0;
   display: block;
   user-select: none;
   pointer-events: none;
