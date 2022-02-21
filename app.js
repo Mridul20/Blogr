@@ -7,6 +7,7 @@ const { spawn } = require("child_process");
 const session = require("express-session");
 const passport = require("passport");
 const passporLocalMongoose = require("passport-local-mongoose");
+const { response } = require("express");
 
 
 const app = express();
@@ -27,7 +28,7 @@ app.use(passport.session());
 
 
 
-mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogDB");
+mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogrDB");
 
 const blogSchema = {
   key: String,
@@ -49,6 +50,7 @@ userSchema.plugin(passporLocalMongoose);
 const Blog = mongoose.model("Blog", blogSchema);
 const User = mongoose.model("User", userSchema);
 
+passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -107,6 +109,8 @@ app.get("/", function (req, res) {
 
 
 app.get("/login", function (req, res) {
+
+
   res.render("login");
 });
 app.get("/register", function (req, res) {
@@ -140,20 +144,14 @@ app.get("/edit", function (req, res) {
 
 app.post("/saveblogdata", function (req, res) {
 
-  console.log("WADdwadawdawda");
-
-  // if(req.user.username != req.body.author)
-  //   return res.render("draft",{username : req.query.username,key : req.query.key,err : "  Reader can't edit"});
-  console.log(req.body.id);
-  console.log(req.body.blogdata);
-  Blog.find({id : req.body.id},function(err,result){
+  Blog.find({key : req.body.key},function(err,result){
       if(err)
         console.log(err);
       if(result.length == 0)
       {
         console.log("hello");
         var newblog = new Blog({
-          key: req.body.id,
+          key: req.body.key,
           title: req.body.title,
           body: String(req.body.blogdata),
           tag: ["1", "2"],
@@ -161,8 +159,10 @@ app.post("/saveblogdata", function (req, res) {
           author : req.body.author,
         });
         newblog.save();
-        console.log(newblog);
-        return;
+        User.updateMany({username : req.body.author},{ $push: { Blogs: req.body.key}},function(erro){
+            if(erro)
+              console.log(erro);
+        });
       }
       else
       {
@@ -183,7 +183,7 @@ app.post("/register",function(req,res){
     username : req.body.username,
     fullname : req.body.name,
     email : req.body.email,
-    blogs : ["1","2"],
+    blogs : [],
   })
 
   User.register(usr,req.body.password,function(err,regUser){
@@ -215,26 +215,70 @@ app.post("/register",function(req,res){
   });  
 });
 
-app.post("/login", function (req, res) {
-  console.log(req.body);
+// app.post("/login", function (req, res) {
 
-  const usr = new User({
-    username : req.body.username,
-    password : req.body.password,
-  })
-  req.login(usr, function(err) {
-    if (err) {
-      console.log(err);
-      return res.redirect(url.format({
-        pathname:"/login",
-        query: {
-          "error": err,
-        }
-      }))             
-    }
-    return res.redirect("/"); 
-  });
-});
+//     const usr = new User({
+//       username : req.body.username,
+//       password : req.body.password,
+//     });
+
+//     console.log(usr);
+//     console.log("awdadw");
+//     passport.authenticate("local", function(err, usr, info) 
+//     {
+//       console.log(info);
+//       if (err) 
+//       {
+//         console.log(err); 
+//         return res.redirect("/login");
+//       }
+//       if (!usr)
+//       {
+//         return  res.redirect("/login");
+//       }
+//       console.log("helo");
+//       req.login(usr, function(err)
+//       {
+//         if(err)
+//         {
+//           console.log(err); // will generate a 500 error
+//           return res.redirect("/login");
+//         }
+//         return res.redirect("/");  
+//       });
+//     });
+//   //   req.login(usr, function(err) {
+//   //     if (err) {
+//   //       console.log(err);
+//   //       return res.redirect(url.format({
+//   //         pathname:"/login",
+//   //         query: {
+//   //           "error": "gooo",
+//   //         }
+//   //       }));     
+//   //     }
+//   //     else
+//   //     {
+//   //       passport.authenticate("local")(req,res,function(){
+//   //         if(req.isAuthenticated())
+//   //         {
+//   //           console.log("DWADawdadawda");
+//   //           return res.redirect("/");
+//   //         }
+            
+//   //         else
+//   //           return res.redirect("/login");
+//   //       });
+        
+//   //     }
+//   // });
+      
+//   });
+app.post('/login', 
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  }); 
 app.get("/search", function (req, res) {
   let tagquery = req.query.username;
   // console.log(tagquery);
