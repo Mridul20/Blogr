@@ -66,9 +66,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
+
     <section id = "secid" >
         
-          <form action="/" method="GET">
+          <form method="GET">
             <div class="switch-button">
               <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
               <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
@@ -91,13 +92,89 @@
               <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
             <!-- <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog"> -->
               </div>
+              <button class="btn" onclick = "draftdata()"> Save Draft </button>
               <button type = "submit" onclick="savedata()" class="btn">Save</button>
               
 
           </form>
     </section>
 
-    <script src = "editor.js"></script>
+    <script>
+      let username = '<%-username%>'
+      let key = '<%-key%>'
+      console.log(key);
+      const editor = new EditorJS({
+      placeholder: 'Let`s write an awesome story!',
+      tools: {
+          header: Header,
+          raw: RawTool,
+          image: SimpleImage, 
+            checklist: {
+              class: Checklist,
+              inlineToolbar: true,
+            },
+            list: {
+              class: List,
+              inlineToolbar: true,
+            },  
+            embed: Embed,
+            quote: Quote,
+      },
+      // autofocus: true
+      // readOnly: true
+    });
+    function draftdata() {
+    editor
+        .save()
+        .then((output) => {
+
+            fetch('/saveblogdata',{
+                method: 'POST',
+                headers: {
+                  'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                  title: document.getElementById("title").value,
+                  blogdata: JSON.stringify(output),
+                  author : username,
+                  id : key,
+              }),
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+    function savedata() {
+      console.log("bye");
+    editor
+        .save()
+        .then((output) => {
+            if (!document.getElementById("title").value) {
+                alert("Enter Blog Title");
+                return; 
+            }
+            fetch('/saveblogdata',{
+                method: 'POST',
+                headers: {
+                  'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                  title: document.getElementById("title").value,
+                  blogdata: JSON.stringify(output),
+                  author : username,
+                  id : key,
+
+              }),
+            })
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+   </script>
+    <!-- <script src = "editor.js"></script> -->
     <script src = "main.js"></script>    
 
 

@@ -1,25 +1,15 @@
-const editor = new EditorJS({
-    placeholder: 'Let`s write an awesome story!',
-    tools: {
-        header: Header,
-        raw: RawTool,
-        image: SimpleImage, 
-          checklist: {
-            class: Checklist,
-            inlineToolbar: true,
-          },
-          list: {
-            class: List,
-            inlineToolbar: true,
-          },  
-          embed: Embed,
-          quote: Quote,
-    },
-    // autofocus: true
-    // readOnly: true
-  });
 
 
+//   function savedraft() {
+//     editor
+//       .save()
+//       .then((output) => {
+
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//     });
+// }
   function savedata() {
     editor
         .save()
@@ -36,8 +26,7 @@ const editor = new EditorJS({
                 body: JSON.stringify({
                   title: document.getElementById("title").value,
                   blogdata: JSON.stringify(output),
-                  // id: "{{id}}",
-                  // tags: $("#blog-tags").val()
+
               }),
             })
                 // .then((response) => {

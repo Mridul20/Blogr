@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const url = require('url');
+const fs = require('fs');
 const { spawn } = require("child_process");
 const session = require("express-session");
 const passport = require("passport");
@@ -29,21 +30,18 @@ app.use(passport.session());
 mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogDB");
 
 const blogSchema = {
-  id: String,
+  key: String,
   title: String,
   body: String,
   tag: Array,
+  author : String,
+  privacy : Boolean,
 };
 
 const userSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
+  fullname: String,
+  email: String,
+  blogs : Array,
 });
 
 userSchema.plugin(passporLocalMongoose);
@@ -65,7 +63,7 @@ app.get('/python', (req, res) => {
 
   var dataToSend;
   // spawn new child process to call the python script
-  const python = spawn('python', ['python/script.py']);
+  const python = spawn('python', ['python/script.py',key]);
   // collect data from script
   python.stdout.on('data', function (data) {
     console.log('Pipe data from python script ...');
@@ -79,9 +77,24 @@ app.get('/python', (req, res) => {
     res.send(dataToSend)
   });
 
+})  
+
+
+app.post("/txt",function(req,res){
+  const username = req.user.username;
+  const path = "bloggers/" + username; 
+  fs.mkdirSync(path);
+
+
+  fs.writeFile(path + "/" + req.query.id, 'Hello World!', function (err) {
+    if (err) 
+      return console.log(err);
+
+
+  });
+
+  return res.redirect("/");
 })
-
-
 
 app.get("/", function (req, res) {
   if(req.isAuthenticated()) {
@@ -90,8 +103,8 @@ app.get("/", function (req, res) {
   else {
     res.render("home",{ login: false });
   }
-   
 });
+
 
 app.get("/login", function (req, res) {
   res.render("login");
@@ -104,20 +117,61 @@ app.get("/logout",function(req,res){
     res.redirect("/");
 });
 
+app.get("/draft",function(req,res){
+    res.render("draft",{username : req.query.username,key : req.query.key});
+})
 app.get("/edit", function (req, res) {
-  res.render("edit");
+  const username = req.user.username;
+
+  User.find({username : username},function(err,result){
+      const key = username  + (result[0].blogs.length + 1);
+      return res.redirect(url.format({
+        pathname:"/draft",
+        query: {
+          "username":username,
+          "key" : key,
+        }
+      }));
+  });
+  
 });
 
+
+
 app.post("/saveblogdata", function (req, res) {
-  console.log(req.body);
+
+  console.log("WADdwadawdawda");
+
+  // if(req.user.username != req.body.author)
+  //   return res.render("draft",{username : req.query.username,key : req.query.key,err : "  Reader can't edit"});
+  console.log(req.body.id);
   console.log(req.body.blogdata);
-  var newblog = new Blog({
-    id: "1234",
-    title: req.body.title,
-    body: String(req.body.blogdata),
-    tag: ["1", "2"],
+  Blog.find({id : req.body.id},function(err,result){
+      if(err)
+        console.log(err);
+      if(result.length == 0)
+      {
+        console.log("hello");
+        var newblog = new Blog({
+          key: req.body.id,
+          title: req.body.title,
+          body: String(req.body.blogdata),
+          tag: ["1", "2"],
+          privacy : false,
+          author : req.body.author,
+        });
+        newblog.save();
+        console.log(newblog);
+        return;
+      }
+      else
+      {
+        Blog.updateOne({id :req.body.id},{title: req.body.title,body: String(req.body.blogdata),tag: ["1", "2"],privacy : false,},function(err){
+          if(err)
+            console.log(err);
+        })
+      }
   });
-  newblog.save();
 });
 
 
@@ -128,7 +182,8 @@ app.post("/register",function(req,res){
   const usr = new User({
     username : req.body.username,
     fullname : req.body.name,
-    email : req.body.email
+    email : req.body.email,
+    blogs : ["1","2"],
   })
 
   User.register(usr,req.body.password,function(err,regUser){
