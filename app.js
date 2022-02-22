@@ -155,9 +155,9 @@ app.get("/gentext/:key",function(req,res){
       console.log(err);
     if(result.length == 0)
       res.send("No blog exists");
-    var txtdata = "Title  ";
-    const newpar = "           ";    
-    txtdata = txtdata + result[0].title + newpar + "written by " + result[0].author + newpar;
+    var txtdata = "Title .................. ";
+    const newpar = ".........................................";    
+    txtdata = txtdata + result[0].title + newpar + "written by .................." + result[0].author + newpar;
     const jsonbody = JSON.parse(result[0].body)
     for(var i=0;i<jsonbody.blocks.length;i++)
       txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
@@ -171,7 +171,7 @@ app.get("/gentext/:key",function(req,res){
       if (err) 
         return console.log(err);
     });
-    return res.redirect("/genaudio/" + req.params.key);
+    return res.redirect("/genaudio/" + result[0].author + "/" + req.params.key);
   });
 })
 
