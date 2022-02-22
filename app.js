@@ -81,6 +81,29 @@ app.get('/python', (req, res) => {
 
 })  
 
+app.get('/profile/:username', function(req, res){
+  console.log(req.params);
+  User.find({username : req.params.username},function(err,result){
+    Blog.find({author:req.params.username},function(error,output){
+      const data = {
+        blog: output,
+        name: result[0].fullname,
+        username: result[0].username,
+        totblog: result[0].blogs
+      }    
+      return res.render("profile", data);
+    })
+
+
+    const data = {
+      name: result[0].fullname,
+      username: result[0].username,
+      totblog: result[0].blogs
+    }
+    // console.log(result);
+    // return res.render("profile", data);
+  });
+})
 
 app.post("/txt",function(req,res){
   const username = req.user.username;
@@ -159,7 +182,7 @@ app.post("/saveblogdata", function (req, res) {
           author : req.body.author,
         });
         newblog.save();
-        User.updateMany({username : req.body.author},{ $push: { Blogs: req.body.key}},function(erro){
+        User.updateMany({username : req.body.author},{ $push: { blogs: req.body.key}},function(erro){
             if(erro)
               console.log(erro);
         });
