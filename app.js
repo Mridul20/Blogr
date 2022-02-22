@@ -92,8 +92,6 @@ app.get('/profile/:username', function(req, res){
       username: result[0].username,
       totblog: result[0].blogs
     }
-    // console.log(result);
-    // return res.render("profile", data);
   });
 })
 
@@ -152,7 +150,31 @@ app.get("/edit", function (req, res) {
   });
 });
 
+app.get("/genaudio/:key",function(req,res){
 
+  Blog.find({key : req.params.key},function(err,result){
+    if(err)
+      console.log(err);
+    if(result.length == 0)
+      res.send("No blog exists");
+    var txtdata = "Title  ";
+    const newpar = "           ";    
+    txtdata = txtdata + result[0].title + newpar + "written by " + result[0].author + newpar;
+    const jsonbody = JSON.parse(result[0].body)
+    for(var i=0;i<jsonbody.blocks.length;i++)
+      txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
+    // console.log(txtdata);
+    if (!fs.existsSync("bloggers"))
+      fs.mkdirSync("bloggers");
+    const path = "bloggers/" + result[0].author; 
+    if (!fs.existsSync(path))
+      fs.mkdirSync(path);
+    fs.writeFile(path + "/"  + req.params.key + ".txt",txtdata, function (err) {
+      if (err) 
+        return console.log(err);
+    });
+  });
+})
 
 app.post("/saveblogdata", function (req, res) {
   console.log(req.body.blogdata);
