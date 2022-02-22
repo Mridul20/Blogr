@@ -23,31 +23,24 @@
     <link href="/draft/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-    <title>Editing</title>
+    <title>Draft - <%= author %></title>
 </head>
 <body>
   <!-- header-->
   <header id="header" class="header fixed-top">
-    <div
-      class="container-fluid container-xl d-flex align-items-center justify-content-between"
-    >
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
       <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
         <img src="/draft/img/logo.png" alt="" />
         <span>Blogr</span>
       </a>
-
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#search">Search</a></li>
-          <li><a class="nav-link scrollto" href="#features">Features</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
+          <li><a class="nav-link scrollto" href="/search/null">Search</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <li><a class="getstarted scrollto" href="/login" style = "text-decoration: none;">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
-      <!-- .navbar -->
     </div>
   </header>
   <!-- End Header -->
@@ -95,10 +88,14 @@
     <section id = "secid" >
         
           <form action = "/" method="GET">
+            
+            <!-- Private Public Toggle -->
             <div class="switch-button">
               <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
               <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
             </div>
+            
+            <!-- Image -->
             <div id="editorjs" class = "des">
               <div class="container py-5 ">
                 <div class="image-area mt-4 crp"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block "></div>
@@ -106,19 +103,15 @@
                   <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
                   <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i>Choose file</label>
                 </div>
-            </div>
-              <!-- <div class ="imgdes">
-                <p><img id="output" width = "100%"></p>
-                <p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;"></p>
-                <p ><label for="file" style="cursor: pointer;">Upload Cover Image</label></p>
-                
-              </div> -->
-
-              <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
-            <!-- <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog"> -->
               </div>
-              <button type = "submit" onclick="draftdata()" class="btn">Publish</button>
+
+              <!-- Title -->
+              <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
+            </div>
+            
+            <button type = "submit" onclick="draftdata()" class="btn">Publish</button>
           </form>
+          
           <button class="btn" onclick="draftdata()"> Draft </button>
     </section>
 
@@ -177,52 +170,49 @@
         });
       }
 
-   </script>
-    <!-- <script src = "editor.js"></script> -->
+    </script>
     <script src = "/draft/main.js"></script>    
 
 
- <!-- ======= Footer ======= -->
- <footer id="footer" class="footer">
-  <div class="footer-top">
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-lg-5 col-md-12 footer-info">
-          <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
-            <img src="/draft/img/logo.png" alt="" />
-            <span>Blogr</span>
-          </a>
-          <p>
-            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget
-            nada terra videa magna derita valies darta donna mare fermentum
-            iaculis eu non diam phasellus.
-          </p>
-          <div class="social-links mt-3">
-            <a href="#" class="twitter"
-              ><i class="bi bi-twitter" style="color: black"></i
-            ></a>
-            <a href="#" class="facebook"
-              ><i class="bi bi-facebook" style="color: black"></i
-            ></a>
-            <a href="#" class="instagram"
-              ><i class="bi bi-instagram" style="color: black"></i
-            ></a>
-            <a href="#" class="linkedin"
-              ><i class="bi bi-linkedin" style="color: black"></i
-            ></a>
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
+              <img src="/draft/img/logo.png" alt="" />
+              <span>Blogr</span>
+            </a>
+            <p>
+              A free open-source platform to share your ideas with the world. 
+            </p>
+            <div class="social-links mt-3">
+              <a href="https://twitter.com/MridulMittal20" class="twitter"
+                ><i class="bi bi-twitter" style="color: black"></i
+              ></a>
+              <a href="https://www.facebook.com/mridul.mittal.90" class="facebook"
+                ><i class="bi bi-facebook" style="color: black"></i
+              ></a>
+              <a href="https://www.instagram.com/mridul_2008/" class="instagram"
+                ><i class="bi bi-instagram" style="color: black"></i
+              ></a>
+              <a href="https://www.linkedin.com/in/mridul-mittal-6463231a8/" class="linkedin"
+                ><i class="bi bi-linkedin" style="color: black"></i
+              ></a>
+            </div>
           </div>
-        </div>
 
-        <div class="col-lg-7 col-6 footer-links">
-          <div class="copyright">
-            &copy; Copyright <strong><span>Blogr</span></strong
-            >. All Rights Reserved
+          <div class="col-lg-7 col-6 footer-links">
+            <div class="copyright">
+              &copy; Copyright <strong><span>Blogr</span></strong
+              >. All Rights Reserved
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 <!-- End Footer -->
     
 </body>
