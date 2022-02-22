@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet">
+    <link href="/draft/style.css" rel="stylesheet">
     <meta content="" name="description">
 
     <meta content="" name="keywords">
   
     <!-- Favicons -->
-    <link href="img/favicon.png" rel="icon">
-    <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="/draft/img/favicon.png" rel="icon">
+    <link href="/draft/img/apple-touch-icon.png" rel="apple-touch-icon">
   
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
   
     <!-- Vendor CSS Files -->
-    <link href="vendor/aos/aos.css" rel="stylesheet">
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="/draft/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/draft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/draft/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/draft/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
     <title>Editing</title>
 </head>
 <body>
@@ -32,7 +32,7 @@
       class="container-fluid container-xl d-flex align-items-center justify-content-between"
     >
       <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
-        <img src="img/logo.png" alt="" />
+        <img src="/draft/img/logo.png" alt="" />
         <span>Blogr</span>
       </a>
 
@@ -43,7 +43,7 @@
           <li><a class="nav-link scrollto" href="#features">Features</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted scrollto" href="register" style = "text-decoration: none;">Login</a></li>
+          <li><a class="getstarted scrollto" href="/login" style = "text-decoration: none;">Login</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -65,11 +65,36 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-
+    <script>
+      function loadeditordata(data)
+      {
+        return editor = new EditorJS({
+        placeholder: 'Let`s write an awesome story!',
+        tools: {
+            header: Header,
+            raw: RawTool,
+            image: SimpleImage, 
+              checklist: {
+                class: Checklist,
+                inlineToolbar: true,
+              },
+              list: {
+                class: List,
+                inlineToolbar: true,
+              },  
+              embed: Embed,
+              quote: Quote,
+        },
+        data: JSON.parse(data),
+        // autofocus: true
+        // readOnly: true
+      });
+      }
+    </script>
 
     <section id = "secid" >
         
-          <form method="GET">
+          <form action = "/" method="GET">
             <div class="switch-button">
               <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
               <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
@@ -92,90 +117,69 @@
               <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
             <!-- <input class="blog-title" id="title" contenteditable="true" placeholder="Title of Blog"> -->
               </div>
-              <button class="btn" onclick = "draftdata()"> Save Draft </button>
-              <button type = "submit" onclick="savedata()" class="btn">Save</button>
-              
-
+              <button type = "submit" onclick="draftdata()" class="btn">Publish</button>
           </form>
+          <button class="btn" onclick="draftdata()"> Draft </button>
     </section>
 
     <script>
-      let username = '<%-username%>'
+      let author = '<%-author%>'
       let key = '<%-key%>'
+      let data = '<%-data%>'
+      if(data)
+      {
+        console.log("found");
+        console.log(data);
+        editor = loadeditordata(data);
+        document.getElementById("title").value = '<%-title%>';
+      }
+      else
+      {
+        editor = new EditorJS({
+        placeholder: 'Let`s write an awesome story!',
+        tools: {
+            header: Header,
+            raw: RawTool,
+            image: SimpleImage, 
+              checklist: {
+                class: Checklist,
+                inlineToolbar: true,
+              },
+              list: {
+                class: List,
+                inlineToolbar: true,
+              },  
+              embed: Embed,
+              quote: Quote,
+        },
+        // autofocus: true
+        // readOnly: true
+        });
+      }
       console.log(key);
-      const editor = new EditorJS({
-      placeholder: 'Let`s write an awesome story!',
-      tools: {
-          header: Header,
-          raw: RawTool,
-          image: SimpleImage, 
-            checklist: {
-              class: Checklist,
-              inlineToolbar: true,
-            },
-            list: {
-              class: List,
-              inlineToolbar: true,
-            },  
-            embed: Embed,
-            quote: Quote,
-      },
-      // autofocus: true
-      // readOnly: true
-    });
-    function draftdata() {
-    editor
-        .save()
-        .then((output) => {
-
+      
+      function draftdata() {
+        editor
+          .save()
+          .then((output) => {
             fetch('/saveblogdata',{
-                method: 'POST',
-                headers: {
-                  'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                  title: document.getElementById("title").value,
-                  blogdata: JSON.stringify(output),
-                  author : username,
-                  key : key,
+              method: 'POST',
+              headers: {
+                'Content-Type':'application/json'
+              },
+              body: JSON.stringify({
+              title: document.getElementById("title").value,
+              blogdata: JSON.stringify(output),
+              author : author,
+              key : key,
               }),
-            })
-        })
-        .catch((error) => {
-            console.log(error);
+            });
         });
-}
+      }
 
-    function savedata() {
-      console.log("bye");
-    editor
-        .save()
-        .then((output) => {
-            if (!document.getElementById("title").value) {
-                alert("Enter Blog Title");
-                return; 
-            }
-            fetch('/saveblogdata',{
-                method: 'POST',
-                headers: {
-                  'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                  title: document.getElementById("title").value,
-                  blogdata: JSON.stringify(output),
-                  author : username,
-                  key : key,
-
-              }),
-            })
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-}
    </script>
     <!-- <script src = "editor.js"></script> -->
-    <script src = "main.js"></script>    
+    <script src = "/draft/main.js"></script>    
 
 
  <!-- ======= Footer ======= -->
@@ -185,7 +189,7 @@
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-info">
           <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
-            <img src="img/logo.png" alt="" />
+            <img src="/draft/img/logo.png" alt="" />
             <span>Blogr</span>
           </a>
           <p>

@@ -17,16 +17,14 @@ app.use(express.json({ limit: "1mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-  app.use(session({
-    secret : "Mridul Mittal",
-    resave : false,
-    saveUninitialized : false
-  }));
+app.use(session({
+  secret : "Mridul Mittal",
+  resave : false,
+  saveUninitialized : false
+}));
 
 app.use(passport.initialize());
 app.use(passport.session()); 
-
-
 
 mongoose.connect("mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogrDB");
 
@@ -53,12 +51,6 @@ const User = mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-const validateEmail = (email) => {
-  return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-};
 
 
 app.get('/python', (req, res) => {
@@ -122,51 +114,48 @@ app.post("/txt",function(req,res){
 })
 
 app.get("/", function (req, res) {
-  if(req.isAuthenticated()) {
+  if(req.isAuthenticated()) 
     res.render("home",{ login: true,username: req.user.username });
-  }
-  else {
+  else 
     res.render("home",{ login: false });
-  }
 });
-
 
 app.get("/login", function (req, res) {
-
-
   res.render("login");
 });
+
 app.get("/register", function (req, res) {
   res.render("register");
 });
+
 app.get("/logout",function(req,res){
     req.logout();
     res.redirect("/");
 });
 
-app.get("/draft",function(req,res){
-    res.render("draft",{username : req.query.username,key : req.query.key});
-})
-app.get("/edit", function (req, res) {
-  const username = req.user.username;
-
-  User.find({username : username},function(err,result){
-      const key = username  + (result[0].blogs.length + 1);
-      return res.redirect(url.format({
-        pathname:"/draft",
-        query: {
-          "username":username,
-          "key" : key,
-        }
-      }));
+app.get("/draft/:author/:key",function(req,res){
+  Blog.find({key:req.params.key},function(err,result){
+    console.log(result);
+    if(result.length == 0)
+      return res.render("draft",{author : req.params.author,key : req.params.key,data: null,title : null});
+    else
+     return res.render("draft",{author : req.params.author,key : req.params.key,data : result[0].body,title : result[0].title});
   });
   
+});
+
+app.get("/edit", function (req, res) {
+  const author = req.user.username;
+  User.find({username : author},function(err,result){
+    const key = author  + (result[0].blogs.length + 1);
+    return res.redirect("/draft/" + author  + "/" + key);
+  });
 });
 
 
 
 app.post("/saveblogdata", function (req, res) {
-
+  console.log(req.body.blogdata);
   Blog.find({key : req.body.key},function(err,result){
       if(err)
         console.log(err);
@@ -189,7 +178,8 @@ app.post("/saveblogdata", function (req, res) {
       }
       else
       {
-        Blog.updateOne({id :req.body.id},{title: req.body.title,body: String(req.body.blogdata),tag: ["1", "2"],privacy : false,},function(err){
+        console.log(req.body.title);
+        Blog.update({key :req.body.key},{title: req.body.title,body: req.body.blogdata,tag: ["1", "2"],privacy : false,},function(err){
           if(err)
             console.log(err);
         })
@@ -198,6 +188,45 @@ app.post("/saveblogdata", function (req, res) {
 });
 
 
+
+
+
+
+
+
+// app.post("/saveblogdata", function (req, res) {
+
+// console.log("q");
+// Blog.find({key : req.body.key},function(err,result){
+//     if(err)
+//       console.log(err);
+//     if(result.length == 0)
+//     {
+//       console.log("hello");
+//       var newblog = new Blog({
+//         key: req.body.key,
+//         title: req.body.title,
+//         body: String(req.body.blogdata),
+//         tag: ["1", "2"],
+//         privacy : false,
+//         author : req.body.author,
+//       });
+//       newblog.save();
+//       User.updateMany({username : req.body.author},{ $push: { Blogs: req.body.key}},function(erro){
+//           if(erro)
+//             console.log(erro);
+//       });
+//     }
+//     else
+//     {
+//       Blog.updateOne({id :req.body.id},{title: req.body.title,body: String(req.body.blogdata),tag: ["1", "2"],privacy : false,},function(err){
+//         if(err)
+//           console.log(err);
+//       })
+//     }
+// });
+// res.send({author :req.body.author ,key: req.body.key});
+// });
 
 app.post("/register",function(req,res){
   console.log(req.body);
@@ -238,94 +267,24 @@ app.post("/register",function(req,res){
   });  
 });
 
-// app.post("/login", function (req, res) {
-
-//     const usr = new User({
-//       username : req.body.username,
-//       password : req.body.password,
-//     });
-
-//     console.log(usr);
-//     console.log("awdadw");
-//     passport.authenticate("local", function(err, usr, info) 
-//     {
-//       console.log(info);
-//       if (err) 
-//       {
-//         console.log(err); 
-//         return res.redirect("/login");
-//       }
-//       if (!usr)
-//       {
-//         return  res.redirect("/login");
-//       }
-//       console.log("helo");
-//       req.login(usr, function(err)
-//       {
-//         if(err)
-//         {
-//           console.log(err); // will generate a 500 error
-//           return res.redirect("/login");
-//         }
-//         return res.redirect("/");  
-//       });
-//     });
-//   //   req.login(usr, function(err) {
-//   //     if (err) {
-//   //       console.log(err);
-//   //       return res.redirect(url.format({
-//   //         pathname:"/login",
-//   //         query: {
-//   //           "error": "gooo",
-//   //         }
-//   //       }));     
-//   //     }
-//   //     else
-//   //     {
-//   //       passport.authenticate("local")(req,res,function(){
-//   //         if(req.isAuthenticated())
-//   //         {
-//   //           console.log("DWADawdadawda");
-//   //           return res.redirect("/");
-//   //         }
-            
-//   //         else
-//   //           return res.redirect("/login");
-//   //       });
-        
-//   //     }
-//   // });
-      
-//   });
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
+app.post('/login',passport.authenticate('local', { failureRedirect: '/login' }),function(req, res) {
     res.redirect('/');
-  }); 
+});
+
 app.get("/search", function (req, res) {
   let tagquery = req.query.username;
   // console.log(tagquery);
   Blog.find({ $or: [{ tag: tagquery }, { title: tagquery }] }, function (err, result) {
     console.log(result);
-
     res.render("search", { result });
-  })
-})
+  });
+});
+
 app.post("/search", function (req, res) {
   var tagquery = req.body.search;
-  // Blog.find({ $or: [{ tag: tagquery }, { title: tagquery }] }, function (err, result) {
-  //   console.log(result);
-  // var newUser = new User({
-  //   id: result.id,
-  //   title: result.title
-  // });
-  // console.log(newUser);
-
-
   return res.redirect(url.format({
     pathname: "/search",
     query: {
-      // "login": true,
       "username": tagquery
     }
   }));
