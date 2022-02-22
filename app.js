@@ -271,23 +271,17 @@ app.post('/login',passport.authenticate('local', { failureRedirect: '/login' }),
     res.redirect('/');
 });
 
-app.get("/search", function (req, res) {
-  let tagquery = req.query.username;
-  // console.log(tagquery);
-  Blog.find({ $or: [{ tag: tagquery }, { title: tagquery }] }, function (err, result) {
+app.get("/search/:query", function (req, res) {
+  let query = req.params.query;
+  Blog.find({ $or: [{ tag: query }, { title: query }] }, function (err, result) {
     console.log(result);
-    res.render("search", { result });
+    res.render("search", {result: result});
   });
 });
 
 app.post("/search", function (req, res) {
-  var tagquery = req.body.search;
-  return res.redirect(url.format({
-    pathname: "/search",
-    query: {
-      "username": tagquery
-    }
-  }));
+  var query = req.body.search;
+  return res.redirect("/search/" + query)
 });
 
 app.listen("3000", function () {
