@@ -95,22 +95,6 @@ app.get('/profile/:username', function(req, res){
   });
 })
 
-app.post("/txt",function(req,res){
-  const username = req.user.username;
-  const path = "bloggers/" + username; 
-  fs.mkdirSync(path);
-
-
-  fs.writeFile(path + "/" + req.query.id, 'Hello World!', function (err) {
-    if (err) 
-      return console.log(err);
-
-
-  });
-
-  return res.redirect("/");
-})
-
 app.get("/", function (req, res) {
   if(req.isAuthenticated()) 
     res.render("home",{ login: true,username: req.user.username });
@@ -150,8 +134,22 @@ app.get("/edit", function (req, res) {
   });
 });
 
-app.get("/genaudio/:key",function(req,res){
+app.get("/genaudio/:author/:key",function(req,res){
+  var dataToSend;
+  const python = spawn('python', ['python/txttoaudio.py',req.params.key,req.params.author]);
+  python.stdout.on('data', function (data) {
+    console.log('Pipe data from python script ...');
+    dataToSend = data.toString();
+  });
+  python.on('close', (code) => 
+  {
+    console.log(`child process close all stdio with code ${code}`);
+    console.log(dataToSend);
+    res.send(dataToSend)
+  });
+});
 
+app.get("/gentext/:key",function(req,res){
   Blog.find({key : req.params.key},function(err,result){
     if(err)
       console.log(err);
@@ -173,6 +171,7 @@ app.get("/genaudio/:key",function(req,res){
       if (err) 
         return console.log(err);
     });
+    return res.redirect("/genaudio/" + req.params.key);
   });
 })
 
