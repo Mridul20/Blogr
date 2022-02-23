@@ -90,15 +90,15 @@
           <form action = "/" method="GET">
             
             <!-- Private Public Toggle -->
-            <div class="switch-button">
+            <!-- <div class="switch-button">
               <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
               <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
-            </div>
+            </div> -->
             
             <!-- Image -->
             <div id="editorjs" class = "des">
               <div class="container py-5 ">
-                <div class="image-area mt-4 crp"><img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block "></div>
+                <div class="image-area mt-4 crp"><img id="imageResult" alt="" class="img-fluid rounded shadow-sm mx-auto d-block "></div>
                 <div class="row py-4 bardes" style = "margin: 0 auto;">
                   <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
                   <label for="upload" class="btn btn-light m-0 rounded-pill px-4"> <i class="fa fa-cloud-upload mr-2 text-muted"></i>Choose file</label>
@@ -121,10 +121,11 @@
       let data = '<%-data%>'
       if(data)
       {
-        console.log("found");
-        console.log(data);
+        // console.log("found");
+        // console.log(data);
         editor = loadeditordata(data);
         document.getElementById("title").value = '<%-title%>';
+        document.getElementById("imageResult").src = '<%-covimg%>';
       }
       else
       {
@@ -151,7 +152,18 @@
       }
       console.log(key);
       
-      function draftdata() {
+      function draftdata() 
+      {
+        if (!document.getElementById("title").value) 
+        {
+          alert("Enter Blog Title");
+          return;
+        }
+        if (!document.getElementById("imageResult").src) 
+        {
+          alert("Enter Cover Image");
+          return;
+        }
         editor
           .save()
           .then((output) => {
@@ -166,12 +178,23 @@
               author : author,
               key : key,
               draft : true,
+              covimg : document.getElementById("imageResult").src,
               }),
             });
         });
       }
 
       function publishdata() {
+        if (!document.getElementById("title").value) 
+        {
+          alert("Enter Blog Title");
+          return;
+        }
+        if (!document.getElementById("imageResult").src) 
+        {
+          alert("Enter Cover Image");
+          return;
+        }
         editor
           .save()
           .then((output) => {
@@ -186,6 +209,7 @@
               author : author,
               key : key,
               draft : false,
+              covimg : document.getElementById("imageResult").src,
               }),
             });
         });

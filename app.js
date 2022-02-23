@@ -12,7 +12,7 @@ const { response } = require("express");
 const app = express();
 
 app.use(express.static("public"));
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
@@ -38,6 +38,7 @@ const blogSchema = {
   tag: Array,
   author: String,
   draft: Boolean,
+  covimg : String,
 
 };
 
@@ -127,6 +128,7 @@ app.get("/draft/:author/:key", function (req, res) {
         key: req.params.key,
         data: null,
         title: null,
+        covimg : "",
       });
     else
       return res.render("draft", {
@@ -134,6 +136,7 @@ app.get("/draft/:author/:key", function (req, res) {
         key: req.params.key,
         data: result[0].body,
         title: result[0].title,
+        covimg : result[0].covimg,
       });
   });
 });
@@ -192,7 +195,6 @@ app.get("/gentext/:key", function (req, res) {
 });
 
 app.post("/saveblogdata", function (req, res) {
-  console.log(req.body.blogdata);
   Blog.find({ key: req.body.key }, function (err, result) {
     if (err) console.log(err);
     if (result.length == 0) {
@@ -204,6 +206,7 @@ app.post("/saveblogdata", function (req, res) {
         tag: ["1", "2"],
         author: req.body.author,
         draft : req.body.draft,
+        covimg : req.body.covimg,
       });
       newblog.save();
       User.updateMany(
@@ -214,7 +217,6 @@ app.post("/saveblogdata", function (req, res) {
         }
       );
     } else {
-      console.log(req.body.title);
       Blog.update(
         { key: req.body.key },
         {
@@ -222,6 +224,7 @@ app.post("/saveblogdata", function (req, res) {
           body: req.body.blogdata,
           tag: ["1", "2"],
           draft : req.body.draft,
+          covimg : req.body.covimg,
         },
         function (err) {
           if (err) console.log(err);
