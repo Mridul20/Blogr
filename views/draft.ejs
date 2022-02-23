@@ -109,7 +109,7 @@
               <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
             </div>
             
-            <button type = "submit" onclick="draftdata()" class="btn">Publish</button>
+            <button type = "submit" onclick="publishdata()" class="btn">Publish</button>
           </form>
           
           <button class="btn" onclick="draftdata()"> Draft </button>
@@ -165,11 +165,31 @@
               blogdata: JSON.stringify(output),
               author : author,
               key : key,
+              draft : true,
               }),
             });
         });
       }
 
+      function publishdata() {
+        editor
+          .save()
+          .then((output) => {
+            fetch('/saveblogdata',{
+              method: 'POST',
+              headers: {
+                'Content-Type':'application/json'
+              },
+              body: JSON.stringify({
+              title: document.getElementById("title").value,
+              blogdata: JSON.stringify(output),
+              author : author,
+              key : key,
+              draft : false,
+              }),
+            });
+        });
+      }
     </script>
     <script src = "/draft/main.js"></script>    
 

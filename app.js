@@ -37,13 +37,15 @@ const blogSchema = {
   body: String,
   tag: Array,
   author: String,
-  privacy: Boolean,
+  draft: Boolean,
+
 };
 
 const userSchema = new mongoose.Schema({
   fullname: String,
   email: String,
   blogs: Array,
+  favourite : Array,
 });
 
 userSchema.plugin(passporLocalMongoose);
@@ -54,6 +56,11 @@ const User = mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+
+app.get("/test",function(req,res){
+    res.render("test",{value : 4});
+});
 
 app.get("/python", (req, res) => {
   var dataToSend;
@@ -77,20 +84,18 @@ app.get("/profile/:username", function (req, res) {
   console.log(req.params);
   User.find({ username: req.params.username }, function (err, result) {
     Blog.find({ author: req.params.username }, function (error, output) {
-      const data = {
-        blog: output,
-        name: result[0].fullname,
-        username: result[0].username,
-        totblog: result[0].blogs,
-      };
-      return res.render("profile", data);
+      Blog.find({key:result[0].favourite},function(erro,ans){
+        const data = {
+          blog: output,
+          name: result[0].fullname,
+          username: result[0].username,
+          noofblog : result[0].blogs.length,
+          totblog: result[0].blogs,
+          favblog: ans
+        };  
+        return res.render("profile", data);
+      })
     });
-
-    const data = {
-      name: result[0].fullname,
-      username: result[0].username,
-      totblog: result[0].blogs,
-    };
   });
 });
 
@@ -197,8 +202,8 @@ app.post("/saveblogdata", function (req, res) {
         title: req.body.title,
         body: String(req.body.blogdata),
         tag: ["1", "2"],
-        privacy: false,
         author: req.body.author,
+        draft : req.body.draft,
       });
       newblog.save();
       User.updateMany(
@@ -216,7 +221,7 @@ app.post("/saveblogdata", function (req, res) {
           title: req.body.title,
           body: req.body.blogdata,
           tag: ["1", "2"],
-          privacy: false,
+          draft : req.body.draft,
         },
         function (err) {
           if (err) console.log(err);
