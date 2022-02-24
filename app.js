@@ -40,7 +40,7 @@ const blogSchema = {
   author: String,
   draft: Boolean,
   covimg : String,
-
+  lastUpdateTime : String
 };
 
 const userSchema = new mongoose.Schema({
@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema({
   email: String,
   blogs: Array,
   favourite : Array,
+  cnt : Number
 });
 
 userSchema.plugin(passporLocalMongoose);
@@ -87,6 +88,8 @@ app.get("/profile/:username", function (req, res) {
   User.find({ username: req.params.username }, function (err, result) {
     Blog.find({ author: req.params.username }, function (error, output) {
       Blog.find({key:result[0].favourite},function(erro,ans){
+        console.log("size");
+        console.log(output.length);
         const data = {
           blog: output,
           name: result[0].fullname,
@@ -142,14 +145,50 @@ app.get("/draft/:author/:key", function (req, res) {
   });
 });
 
+app.get("/delete/:author/:key",function(req,res){
+
+  Blog.deleteOne({key: req.params.key},function(err){
+    if(err)
+      console.log(err);
+  });
+  User.update({username : req.params.author},{ $pull :{blogs : req.params.key}} ,function(err){
+    if(err)
+      console.log(err);
+  });
+  
+  res.redirect("/profile/" + req.params.author);
+})
 app.get("/edit", function (req, res) {
   const author = req.user.username;
   User.find({ username: author }, function (err, result) {
-    const key = author + (result[0].blogs.length + 1);
+
+    var key = author + (result[0].cnt);    
     return res.redirect("/draft/" + author + "/" + key);
   });
 });
 
+
+app.get("/display/:author/:key", function (req, res) {
+  Blog.find({ key: req.params.key }, function (err, result) {
+    console.log(result);
+    if (result.length == 0)
+      return res.render("display", {
+        author: req.params.author,
+        key: req.params.key,
+        data: null,
+        title: null,
+        covimg : "",
+      });
+    else
+      return res.render("display", {
+        author: req.params.author,
+        key: req.params.key,
+        data: result[0].body,
+        title: result[0].title,
+        covimg : result[0].covimg,
+      });
+  });
+});
 app.get("/genaudio/:author/:key", function (req, res) {
   var dataToSend;
   const python = spawn("python", [
@@ -196,7 +235,20 @@ app.get("/gentext/:key", function (req, res) {
 });
 
 app.post("/saveblogdata", function (req, res) {
+
+  const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.",
+  "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."
+  ];
+  const ts = Date.now();
+  const date_ob = new Date(ts);
+  const date = (date_ob.getDate());
+  const month = (date_ob.getMonth() + 1);
+  const year = date_ob.getFullYear();
+  
+  const time = monthNames[month-1] + " " + date + "," + year;
+
   Blog.find({ key: req.body.key }, function (err, result) {
+    console.log(result[0]);
     if (err) console.log(err);
     if (result.length == 0) {
       console.log("hello");
@@ -208,11 +260,12 @@ app.post("/saveblogdata", function (req, res) {
         author: req.body.author,
         draft : req.body.draft,
         covimg : req.body.covimg,
+        lastUpdateTime : time, 
       });
       newblog.save();
       User.updateMany(
         { username: req.body.author },
-        { $push: { blogs: req.body.key } },
+        { $push: { blogs: req.body.key } ,$inc : {cnt : 1}},
         function (erro) {
           if (erro) console.log(erro);
         }
@@ -226,6 +279,7 @@ app.post("/saveblogdata", function (req, res) {
           tag: ["1", "2"],
           draft : req.body.draft,
           covimg : req.body.covimg,
+          lastUpdateTime : time, 
         },
         function (err) {
           if (err) console.log(err);
@@ -277,6 +331,7 @@ app.post("/register", function (req, res) {
     fullname: req.body.name,
     email: req.body.email,
     blogs: [],
+    cnt : 0,
   });
 
   User.register(usr, req.body.password, function (err, regUser) {

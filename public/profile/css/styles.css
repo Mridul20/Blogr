@@ -2085,7 +2085,7 @@ body{
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #EEEEEE;
+  background-color: #F7F7F7;
   background-clip: border-box;
   border: 0 solid rgba(0,0,0,.125);
   border-radius: .25rem;
@@ -2119,3 +2119,8 @@ body{
 .shadow-none {
   box-shadow: none!important;
 }
+
+.bd {
+    display : inline;
+}
+
