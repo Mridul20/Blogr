@@ -8,6 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const passporLocalMongoose = require("passport-local-mongoose");
 const { response } = require("express");
+const nodemailer = require('nodemailer');
 
 const app = express();
 
@@ -102,8 +103,8 @@ app.get("/profile/:username", function (req, res) {
 
 app.get("/", function (req, res) {
   if (req.isAuthenticated())
-    res.render("home", { login: true, username: req.user.username });
-  else res.render("home", { login: false });
+    res.render("home", { login: true, username: req.user.username, message: req.query.message  });
+  else res.render("home", { login: false, message: req.query.message  });
 });
 
 app.get("/login", function (req, res) {
@@ -333,7 +334,47 @@ app.post("/search", function (req, res) {
   var query = req.body.search;
   return res.redirect("/search/" + query);
 });
+app.post("/contact", function (req, res) {
+  const data = req.body
+  // console.log("dakda")
+  // console.log(data);
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'spotr.iiita@gmail.com',
+      pass: 'spotr@1234'
+    }
+  });
 
+  var mailOptions = {
+    from: `spotr.iiita@gmail.com`,
+    to: 'spotr.iiita@gmail.com',
+    subject: `${data.subject},blogr query`,
+    text: `
+      ${data.message} .
+      Name :${data.name}
+      Email Id: ${data.email}`
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return res.redirect(url.format({
+        pathname: "/",
+        query: {
+          message: "Email not Sent"
+        }
+      }));
+    }
+    else {
+      return res.redirect(url.format({
+        pathname: "/",
+        query: {
+          message: "Email sent successfully"
+        }
+      }));
+    }
+  });
+})
 app.listen("3000", function () {
   console.log("Server started at port 3000");
 });
