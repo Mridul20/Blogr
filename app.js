@@ -48,7 +48,9 @@ const userSchema = new mongoose.Schema({
   email: String,
   blogs: Array,
   favourite : Array,
-  cnt : Number
+  cnt : Number,
+  address : String,
+  mobile : String,
 });
 
 userSchema.plugin(passporLocalMongoose);
@@ -96,6 +98,9 @@ app.get("/profile/:username", function (req, res) {
           username: result[0].username,
           noofblog : result[0].blogs.length,
           totblog: result[0].blogs,
+          address : result[0].address,
+          mobile : result[0].mobile,
+          email : result[0].email,
           favblog: ans
         };  
         return res.render("profile", data);
@@ -166,6 +171,7 @@ app.get("/edit", function (req, res) {
     return res.redirect("/draft/" + author + "/" + key);
   });
 });
+
 
 
 app.get("/display/:author/:key", function (req, res) {
@@ -289,40 +295,6 @@ app.post("/saveblogdata", function (req, res) {
   });
 });
 
-// app.post("/saveblogdata", function (req, res) {
-
-// console.log("q");
-// Blog.find({key : req.body.key},function(err,result){
-//     if(err)
-//       console.log(err);
-//     if(result.length == 0)
-//     {
-//       console.log("hello");
-//       var newblog = new Blog({
-//         key: req.body.key,
-//         title: req.body.title,
-//         body: String(req.body.blogdata),
-//         tag: ["1", "2"],
-//         privacy : false,
-//         author : req.body.author,
-//       });
-//       newblog.save();
-//       User.updateMany({username : req.body.author},{ $push: { Blogs: req.body.key}},function(erro){
-//           if(erro)
-//             console.log(erro);
-//       });
-//     }
-//     else
-//     {
-//       Blog.updateOne({id :req.body.id},{title: req.body.title,body: String(req.body.blogdata),tag: ["1", "2"],privacy : false,},function(err){
-//         if(err)
-//           console.log(err);
-//       })
-//     }
-// });
-// res.send({author :req.body.author ,key: req.body.key});
-// });
-
 app.post("/register", function (req, res) {
   console.log(req.body);
 
@@ -332,6 +304,8 @@ app.post("/register", function (req, res) {
     email: req.body.email,
     blogs: [],
     cnt : 0,
+    mobile : "+91",
+    address : "Home",
   });
 
   User.register(usr, req.body.password, function (err, regUser) {
@@ -430,6 +404,40 @@ app.post("/contact", function (req, res) {
     }
   });
 })
+
+app.post("/updateprofile",function(req,res){
+  const username  = req.user.username;
+  User.find({username:username},function(err,result){
+    console.log(result);
+    console.log(req.body);
+    var email;
+    if(req.body.email == '')
+      email = result[0].email;
+    else
+      email = req.body.email; 
+    var address;
+    if(req.body.address == '')
+      address = result[0].address;
+    else
+      address = req.body.address; 
+    var mobile;
+    if(req.body.mobile == '')
+      mobile = result[0].mobile;
+    else
+      mobile = req.body.mobile; 
+    var fullname;
+    if(req.body.fullname == '')
+      fullname = result[0].fullname;
+    else
+      fullname = req.body.fullname; 
+    User.update({username,username},{fullname : fullname, mobile : mobile , address: address, email : email},function(erro){
+      if(erro)
+        console.log(erro);
+      res.redirect("/profile/"+username);
+    });
+  });
+});
+
 app.listen("3000", function () {
   console.log("Server started at port 3000");
 });
