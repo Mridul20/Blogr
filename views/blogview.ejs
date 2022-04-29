@@ -26,7 +26,9 @@
   <link href="/draft/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
   <title>Draft - <%= author %>
+
   </title>
 </head>
 
@@ -65,6 +67,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
   <script>
     function loadeditordata(data) {
       return editor = new EditorJS({
@@ -90,7 +93,7 @@
       });
     }
   </script>
-
+  <!-- <script src="audio.js" ></script> -->
   <section id="secid">
     <form action="/" method="GET" class="">
 
@@ -125,6 +128,7 @@
 
     if (data) {
       editor = loadeditordata(data);
+      console.log(data);
       document.getElementById("title").value = '<%-title%>';
       document.getElementById("imageResult").src = '<%-covimg%>';
     }
@@ -151,7 +155,7 @@
         readOnly: true
       });
     }
-    
+
 
     function draftdata() {
       if (!document.getElementById("title").value) {
@@ -212,6 +216,8 @@
     }
   </script>
   <script src="/draft/main.js"></script>
+  <script src="/draft/audio.js"></script>
+
 
 
   <!-- ======= Footer ======= -->
