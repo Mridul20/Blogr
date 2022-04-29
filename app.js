@@ -39,19 +39,19 @@ const blogSchema = {
   tag: Array,
   author: String,
   draft: Boolean,
-  covimg : String,
-  views : Number,
-  lastUpdateTime : String
+  covimg: String,
+  views: Number,
+  lastUpdateTime: String
 };
 
 const userSchema = new mongoose.Schema({
   fullname: String,
   email: String,
   blogs: Array,
-  favourite : Array,
-  cnt : Number,
-  address : String,
-  mobile : String,
+  favourite: Array,
+  cnt: Number,
+  address: String,
+  mobile: String,
 });
 
 userSchema.plugin(passporLocalMongoose);
@@ -64,8 +64,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.get("/test",function(req,res){
-    res.render("test",{value : 4});
+app.get("/test", function (req, res) {
+  res.render("test", { value: 4 });
 });
 
 app.get("/python", (req, res) => {
@@ -90,20 +90,20 @@ app.get("/profile/:username", function (req, res) {
   console.log(req.params);
   User.find({ username: req.params.username }, function (err, result) {
     Blog.find({ author: req.params.username }, function (error, output) {
-      Blog.find({key:result[0].favourite},function(erro,ans){
+      Blog.find({ key: result[0].favourite }, function (erro, ans) {
         console.log("size");
         console.log(output.length);
         const data = {
           blog: output,
           name: result[0].fullname,
           username: result[0].username,
-          noofblog : result[0].blogs.length,
+          noofblog: result[0].blogs.length,
           totblog: result[0].blogs,
-          address : result[0].address,
-          mobile : result[0].mobile,
-          email : result[0].email,
+          address: result[0].address,
+          mobile: result[0].mobile,
+          email: result[0].email,
           favblog: ans
-        };  
+        };
         return res.render("profile", data);
       })
     });
@@ -111,9 +111,16 @@ app.get("/profile/:username", function (req, res) {
 });
 
 app.get("/", function (req, res) {
-  if (req.isAuthenticated())
-    res.render("home", { login: true, username: req.user.username, message: req.query.message  });
-  else res.render("home", { login: false, message: req.query.message  });
+  Blog.find({}, function (err, result) {
+
+    var sendres = result.splice(0, 3);
+
+    // console.log(sendres.length);
+    if (req.isAuthenticated())
+      return res.render("home", { login: true, username: req.user.username, message: req.query.message, topblog: sendres });
+    else
+      return res.render("home", { login: false, message: req.query.message, topblog: sendres });
+  }).sort({ "views": -1 });
 });
 
 app.get("/login", function (req, res) {
@@ -138,7 +145,7 @@ app.get("/draft/:author/:key", function (req, res) {
         key: req.params.key,
         data: null,
         title: null,
-        covimg : "",
+        covimg: "",
       });
     else
       return res.render("draft", {
@@ -146,7 +153,7 @@ app.get("/draft/:author/:key", function (req, res) {
         key: req.params.key,
         data: result[0].body,
         title: result[0].title,
-        covimg : result[0].covimg,
+        covimg: result[0].covimg,
       });
   });
 });
@@ -160,12 +167,12 @@ app.get("/view/:author/:key", function (req, res) {
         key: req.params.key,
         data: null,
         title: null,
-        covimg : "",
+        covimg: "",
       });
     else {
       Blog.update(
         { key: req.params.key },
-        {$inc : {views : 1}},
+        { $inc: { views: 1 } },
         function (erro) {
           if (erro) console.log(erro);
         }
@@ -177,30 +184,30 @@ app.get("/view/:author/:key", function (req, res) {
         key: req.params.key,
         data: result[0].body,
         title: result[0].title,
-        covimg : result[0].covimg,
+        covimg: result[0].covimg,
       });
     }
   });
 });
 
-app.get("/delete/:author/:key",function(req,res){
+app.get("/delete/:author/:key", function (req, res) {
 
-  Blog.deleteOne({key: req.params.key},function(err){
-    if(err)
+  Blog.deleteOne({ key: req.params.key }, function (err) {
+    if (err)
       console.log(err);
   });
-  User.update({username : req.params.author},{ $pull :{blogs : req.params.key}} ,function(err){
-    if(err)
+  User.update({ username: req.params.author }, { $pull: { blogs: req.params.key } }, function (err) {
+    if (err)
       console.log(err);
   });
-  
+
   res.redirect("/profile/" + req.params.author);
 })
 app.get("/edit", function (req, res) {
   const author = req.user.username;
   User.find({ username: author }, function (err, result) {
 
-    var key = author + (result[0].cnt);    
+    var key = author + (result[0].cnt);
     return res.redirect("/draft/" + author + "/" + key);
   });
 });
@@ -216,7 +223,7 @@ app.get("/display/:author/:key", function (req, res) {
         key: req.params.key,
         data: null,
         title: null,
-        covimg : "",
+        covimg: "",
       });
     else
       return res.render("display", {
@@ -224,7 +231,7 @@ app.get("/display/:author/:key", function (req, res) {
         key: req.params.key,
         data: result[0].body,
         title: result[0].title,
-        covimg : result[0].covimg,
+        covimg: result[0].covimg,
       });
   });
 });
@@ -276,15 +283,15 @@ app.get("/gentext/:key", function (req, res) {
 app.post("/saveblogdata", function (req, res) {
 
   const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.",
-  "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."
+    "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."
   ];
   const ts = Date.now();
   const date_ob = new Date(ts);
   const date = (date_ob.getDate());
   const month = (date_ob.getMonth() + 1);
   const year = date_ob.getFullYear();
-  
-  const time = monthNames[month-1] + " " + date + "," + year;
+
+  const time = monthNames[month - 1] + " " + date + "," + year;
 
   Blog.find({ key: req.body.key }, function (err, result) {
     console.log(result[0]);
@@ -297,15 +304,15 @@ app.post("/saveblogdata", function (req, res) {
         body: String(req.body.blogdata),
         tag: ["1", "2"],
         author: req.body.author,
-        draft : req.body.draft,
-        covimg : req.body.covimg,
-        lastUpdateTime : time, 
-        views : 0
+        draft: req.body.draft,
+        covimg: req.body.covimg,
+        lastUpdateTime: time,
+        views: 0
       });
       newblog.save();
       User.updateMany(
         { username: req.body.author },
-        { $push: { blogs: req.body.key } ,$inc : {cnt : 1}},
+        { $push: { blogs: req.body.key }, $inc: { cnt: 1 } },
         function (erro) {
           if (erro) console.log(erro);
         }
@@ -317,9 +324,9 @@ app.post("/saveblogdata", function (req, res) {
           title: req.body.title,
           body: req.body.blogdata,
           tag: ["1", "2"],
-          draft : req.body.draft,
-          covimg : req.body.covimg,
-          lastUpdateTime : time, 
+          draft: req.body.draft,
+          covimg: req.body.covimg,
+          lastUpdateTime: time,
         },
         function (err) {
           if (err) console.log(err);
@@ -337,9 +344,9 @@ app.post("/register", function (req, res) {
     fullname: req.body.name,
     email: req.body.email,
     blogs: [],
-    cnt : 0,
-    mobile : "+91",
-    address : "Home",
+    cnt: 0,
+    mobile: "+91",
+    address: "Home",
   });
 
   User.register(usr, req.body.password, function (err, regUser) {
@@ -385,15 +392,15 @@ app.post(
 app.get("/search/:query", function (req, res) {
   let query = req.params.query;
   Blog.find(
-    { $or: [{ tag: query }, { title: query },{ author: query }] },
+    { $or: [{ tag: query }, { title: query }, { author: query }] },
     function (err, result) {
       console.log(result);
       if (req.isAuthenticated())
-        return res.render("search", { login: true, username: req.user.username,result: result  });
-      else 
-        return res.render("search", { login: false, message: req.query.message,result: result  });
+        return res.render("search", { login: true, username: req.user.username, result: result });
+      else
+        return res.render("search", { login: false, message: req.query.message, result: result });
     }
-  );
+  ).sort({ views: -1 });
 });
 
 app.post("/search", function (req, res) {
@@ -440,35 +447,35 @@ app.post("/contact", function (req, res) {
   });
 })
 
-app.post("/updateprofile",function(req,res){
-  const username  = req.user.username;
-  User.find({username:username},function(err,result){
+app.post("/updateprofile", function (req, res) {
+  const username = req.user.username;
+  User.find({ username: username }, function (err, result) {
     console.log(result);
     console.log(req.body);
     var email;
-    if(req.body.email == '')
+    if (req.body.email == '')
       email = result[0].email;
     else
-      email = req.body.email; 
+      email = req.body.email;
     var address;
-    if(req.body.address == '')
+    if (req.body.address == '')
       address = result[0].address;
     else
-      address = req.body.address; 
+      address = req.body.address;
     var mobile;
-    if(req.body.mobile == '')
+    if (req.body.mobile == '')
       mobile = result[0].mobile;
     else
-      mobile = req.body.mobile; 
+      mobile = req.body.mobile;
     var fullname;
-    if(req.body.fullname == '')
+    if (req.body.fullname == '')
       fullname = result[0].fullname;
     else
-      fullname = req.body.fullname; 
-    User.update({username,username},{fullname : fullname, mobile : mobile , address: address, email : email},function(erro){
-      if(erro)
+      fullname = req.body.fullname;
+    User.update({ username, username }, { fullname: fullname, mobile: mobile, address: address, email: email }, function (erro) {
+      if (erro)
         console.log(erro);
-      res.redirect("/profile/"+username);
+      res.redirect("/profile/" + username);
     });
   });
 });

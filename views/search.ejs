@@ -44,7 +44,7 @@
   <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-      <a href="/" class="logo d-flex align-items-center" style = "text-decoration: none;">
+      <a href="/" class="logo d-flex align-items-center" style="text-decoration: none;">
         <img src="img/logo.png" alt="">
         <span>Blogr</span>
       </a>
@@ -76,16 +76,16 @@
           <div class="inner-form">
             <div class="input-field">
               <button class="btn-search" type="submit">
-                <img src="img/bar.png" width = 60% alt="">
+                <img src="img/bar.png" width=60% alt="">
               </button>
-              <input id="search" type="text" name="search" placeholder="What are you looking for ....." >
+              <input id="search" type="text" name="search" placeholder="What are you looking for .....">
             </div>
           </div>
         </form>
         <!-- <div> -->
-          <img src="img/pricing-business.png" height = "40%"  width="40%">
+        <img src="img/pricing-business.png" height="40%" width="40%">
         <!-- </div> -->
-        
+
       </div>
     </div>
   </section>
@@ -97,17 +97,29 @@
       <div class="row" id="row">
         <% result.forEach(function(item){ %>
 
-          <div class="col-4 pd " style = "padding-left: 5%;">
+          <div class="col-4 pd " style="padding-left: 5%;">
             <div class="post-box">
               <div class="post-img">
-                <img src= <%= item.covimg %>  class="img-fluid" alt="" />
+                <img src=<%=item.covimg %> class="img-fluid" alt="" />
               </div>
-              <span class="post-date"> <%= item.lastUpdateTime %> </span>
+              <div class="row">
+                <div class="col-6">
+                  <span class="post-date">
+                    <%= item.lastUpdateTime %>
+                  </span>
+                </div>
+                <div class="col-6" style="text-align:right;  ">
+                  <span class="post-date">
+                    <%= item.views %> views
+                  </span>
+                </div>
+
+              </div>
               <h3 class="post-title">
-                <%= item.title %> 
+                <%= item.title %>
               </h3>
-              <a href = "/view/<%=item.author%>/<%= item.key %>" class="readmore stretched-link mt-auto"><span>Read More</span><i
-                  class="bi bi-arrow-right"></i></a>
+              <a href="/view/<%=item.author%>/<%= item.key %>" class="readmore stretched-link mt-auto"><span>Read
+                  More</span><i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
           <% }) %>
