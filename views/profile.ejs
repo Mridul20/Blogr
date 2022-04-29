@@ -28,11 +28,7 @@
 
         <nav id="navbar" class="navbar">
           <ul>
-            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-            <li><a class="nav-link scrollto" href="#search">Search</a></li>
-            <li><a class="nav-link scrollto" href="#features">Features</a></li>
-            <li><a class="nav-link scrollto" href="#team">Team</a></li>
-            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+            <li><a class="nav-link scrollto active" href="/">Home</a></li>
             <li><a class="getstarted scrollto" href="/logout">Logout</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
@@ -145,7 +141,7 @@
                         <sub><%= favblog[i].lastUpdateTime %></sub> 
                     </div>
                     <div class ="col-3" style = "margin: auto; text-align: center;">
-                      Views :  <%= favblog[i].views %>
+                      Views : <%= favblog[i].views %>
                     </div>
                     <div class="col-3" style = "margin: auto;">
                       <div class="row">
@@ -181,6 +177,7 @@
 
                 <div id = "draft" class ="blog" style = "padding-top: 2%;">
                   <% for(var i = 0;i < blog.length;i++) { %>
+                    <% if(blog[i].draft == false) {continue;} %>
                     <div class ="row">
                       <div class = "col-6">
                           <%= blog[i].title %>
@@ -188,7 +185,7 @@
                           <sub><%= blog[i].lastUpdateTime %></sub> 
                       </div>
                       <div class ="col-3" style = "margin: auto; text-align: center;">
-                        Views :  <%= blog[i].views %>
+                        Views : <%= blog[i].views %>
                       </div>
                       <div class="col-3" style = "margin: auto;">
                         <div class="row">
@@ -226,7 +223,7 @@
                   <div id = "publish" class ="blog" style = "padding-top: 2%;">
                     <% for(var i = 0;i < blog.length;i++) { %>
 
-                      <% if(blog[i].draft == true) { continue;} %>
+                      <% if(blog[i].draft == true) {continue;} %>
                       <div class ="row">
                         <div class = "col-6">
                             <%= blog[i].title %>
@@ -234,7 +231,7 @@
                             <sub><%= blog[i].lastUpdateTime %></sub> 
                         </div>
                         <div class ="col-3" style = "margin: auto; text-align: center;">
-                          Views :  <%= blog[i].views %>
+                        Views : <%= blog[i].views %>
                         </div>
                         <div class="col-3" style = "margin: auto;">
                           <div class="row">
@@ -279,12 +276,18 @@
       </div>
     </div>
     <script>
+        allblog = document.getElementsByClassName("blog");
+        for (i = 0; i < allblog.length; i++) 
+          allblog[i].style.display = "none";
+        // console.log(curr);
+        document.getElementById("draft").style.display = "block";
+        // $(evt.target).addClass("active");
       function updatedisplay(evt,curr)
       {
         allblog = document.getElementsByClassName("blog");
         for (i = 0; i < allblog.length; i++) 
           allblog[i].style.display = "none";
-        console.log(curr);
+        // console.log(curr);
         document.getElementById(curr).style.display = "block";
         $(evt.target).addClass("active");
       }
