@@ -10,8 +10,8 @@
   <meta content="" name="keywords" />
 
   <!-- Favicons -->
-  <link href="img/favicon.png" rel="icon" />
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon" />
+  <link href="img/logo.png" rel="icon" />
+  <link href="img/logo.png" rel="apple-touch-icon" />
 
   <!-- Google Fonts -->
   <link
@@ -51,15 +51,16 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="nav-link scrollto active" href="/">Home</a></li>
-          <li><a class="nav-link scrollto" href="#search">Search</a></li>
-          <li><a class="nav-link scrollto" href="#features">Features</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
-          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <li><a class="getstarted nav-link scrollto" href="register">Login/Register</a></li>
+          <% if(login) { %>
+            <li><a class="getstarted scrollto" href="/profile/<%= username %>">
+                <%= username %>
+              </a></li>
+            <% } else { %>
+              <li><a class="getstarted scrollto" href="/register">Login</a></li>
+              <% } %>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+      </nav>
 
     </div>
   </header><!-- End Header -->
@@ -81,20 +82,11 @@
             </div>
           </div>
         </form>
-        <img src="img/pricing-business.png" height = "40%"  width="40%">
+        <!-- <div> -->
+          <img src="img/pricing-business.png" height = "40%"  width="40%">
+        <!-- </div> -->
+        
       </div>
-      <!-- <form action="/search" method="POST">
-        <div class="d-flex justify-content-center h-100">
-          <div class="searchbar">
-            <input class="search_input" id="search1" type="text" name="search" placeholder="Search..." required>
-            <button type="submit" value="submit" class="search_icon"><i class="fas fa-search"></i></button>
-          </div>
-        </div>
-  
-      </form>  -->
-      <header>
-        <p>The first step in blogging is not writing them but reading them</p>
-      </header>
     </div>
   </section>
 
@@ -108,13 +100,13 @@
           <div class="col-4 pd " style = "padding-left: 5%;">
             <div class="post-box">
               <div class="post-img">
-                <img src="img/blog/blog-1.jpg" class="img-fluid" alt="" />
+                <img src= <%= item.covimg %>  class="img-fluid" alt="" />
               </div>
-              <span class="post-date">Tue, September 15</span>
+              <span class="post-date"> <%= item.lastUpdateTime %> </span>
               <h3 class="post-title">
                 <%= item.title %> 
               </h3>
-              <a href="blog-single.html" class="readmore stretched-link mt-auto"><span>Read More</span><i
+              <a href = "/view/<%=item.author%>/<%= item.key %>" class="readmore stretched-link mt-auto"><span>Read More</span><i
                   class="bi bi-arrow-right"></i></a>
             </div>
           </div>

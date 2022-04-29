@@ -40,6 +40,7 @@ const blogSchema = {
   author: String,
   draft: Boolean,
   covimg : String,
+  views : Number,
   lastUpdateTime : String
 };
 
@@ -147,6 +148,38 @@ app.get("/draft/:author/:key", function (req, res) {
         title: result[0].title,
         covimg : result[0].covimg,
       });
+  });
+});
+
+app.get("/view/:author/:key", function (req, res) {
+  Blog.find({ key: req.params.key }, function (err, result) {
+    console.log(result);
+    if (result.length == 0)
+      return res.render("blogview", {
+        author: req.params.author,
+        key: req.params.key,
+        data: null,
+        title: null,
+        covimg : "",
+      });
+    else {
+      Blog.update(
+        { key: req.params.key },
+        {$inc : {views : 1}},
+        function (erro) {
+          if (erro) console.log(erro);
+        }
+      );
+      console.log("hello");
+      console.log(result[0].views);
+      return res.render("blogview", {
+        author: req.params.author,
+        key: req.params.key,
+        data: result[0].body,
+        title: result[0].title,
+        covimg : result[0].covimg,
+      });
+    }
   });
 });
 
@@ -267,6 +300,7 @@ app.post("/saveblogdata", function (req, res) {
         draft : req.body.draft,
         covimg : req.body.covimg,
         lastUpdateTime : time, 
+        views : 0
       });
       newblog.save();
       User.updateMany(
@@ -351,10 +385,13 @@ app.post(
 app.get("/search/:query", function (req, res) {
   let query = req.params.query;
   Blog.find(
-    { $or: [{ tag: query }, { title: query }] },
+    { $or: [{ tag: query }, { title: query },{ author: query }] },
     function (err, result) {
       console.log(result);
-      res.render("search", { result: result });
+      if (req.isAuthenticated())
+        return res.render("search", { login: true, username: req.user.username,result: result  });
+      else 
+        return res.render("search", { login: false, message: req.query.message,result: result  });
     }
   );
 });
@@ -365,8 +402,6 @@ app.post("/search", function (req, res) {
 });
 app.post("/contact", function (req, res) {
   const data = req.body
-  // console.log("dakda")
-  // console.log(data);
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

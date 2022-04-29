@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/draft/style.css" rel="stylesheet">
+  <meta content="" name="description">
+
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="/draft/img/favicon.png" rel="icon">
+  <link href="/draft/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/draft/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/draft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/draft/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/draft/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <title>Draft - <%= author %>
+  </title>
+</head>
+
+<body>
+  <!-- header-->
+  <header id="header" class="header fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      <a href="/" class="logo d-flex align-items-center" style="text-decoration: none;">
+        <img src="/draft/img/logo.png" alt="" />
+        <span>Blogr</span>
+      </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto" href="/search/null">Search</a></li>
+          <!-- <li><a class="nav-link scrollto" href="#contact">Contact</a></li> -->
+          <li><a class="getstarted scrollto" href="/profile/<%= author %>" style="text-decoration: none;">
+              <%= author %>
+            </a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@2.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/raw"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@2.3.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script>
+    function loadeditordata(data) {
+      return editor = new EditorJS({
+        placeholder: 'Let`s write an awesome story!',
+        tools: {
+          header: Header,
+          raw: RawTool,
+          image: SimpleImage,
+          checklist: {
+            class: Checklist,
+            inlineToolbar: true,
+          },
+          list: {
+            class: List,
+            inlineToolbar: true,
+          },
+          embed: Embed,
+          quote: Quote,
+        },
+        data: JSON.parse(data),
+        // autofocus: true
+        readOnly: true
+      });
+    }
+  </script>
+
+  <section id="secid">
+    <form action="/" method="GET" class="">
+
+      <div id="editorjs" class="des">
+        <div class="container py-5 " style="float: none;">
+          <div class="image-area mt-4 crp">
+            <img id="imageResult" alt="" class="img-fluid rounded shadow-sm mx-auto d-block ">
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="container">
+          <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
+        </div>
+
+      </div>
+      <!-- <div style="text-align: center;">
+        <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>
+        <button type="submit" onclick="draftdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Draft</button>
+      </div> -->
+      <!-- <button type="submit" onclick="publishdata()" class="btn">Publish</button>
+      <button class="btn" onclick="draftdata()"> Draft </button> -->
+      <br><br>
+    </form>
+
+  </section>
+
+  <script>
+    let author = '<%-author%>'
+    let key = '<%-key%>'
+    let data = '<%-data%>'
+
+    if (data) {
+      editor = loadeditordata(data);
+      document.getElementById("title").value = '<%-title%>';
+      document.getElementById("imageResult").src = '<%-covimg%>';
+    }
+    else {
+      console.log("not found");
+      editor = new EditorJS({
+        placeholder: 'Let`s write an awesome story!',
+        tools: {
+          header: Header,
+          raw: RawTool,
+          image: SimpleImage,
+          checklist: {
+            class: Checklist,
+            inlineToolbar: true,
+          },
+          list: {
+            class: List,
+            inlineToolbar: true,
+          },
+          embed: Embed,
+          quote: Quote,
+        },
+        // autofocus: true
+        readOnly: true
+      });
+    }
+    
+
+    function draftdata() {
+      if (!document.getElementById("title").value) {
+        alert("Enter Blog Title");
+        return;
+      }
+      if (!document.getElementById("imageResult").src) {
+        alert("Enter Cover Image");
+        return;
+      }
+      editor
+        .save()
+        .then((output) => {
+          fetch('/saveblogdata', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              title: document.getElementById("title").value,
+              blogdata: JSON.stringify(output),
+              author: author,
+              key: key,
+              draft: true,
+              covimg: document.getElementById("imageResult").src,
+            }),
+          });
+        });
+    }
+
+    function publishdata() {
+      if (!document.getElementById("title").value) {
+        alert("Enter Blog Title");
+        return;
+      }
+      if (!document.getElementById("imageResult").src) {
+        alert("Enter Cover Image");
+        return;
+      }
+      editor
+        .save()
+        .then((output) => {
+          fetch('/saveblogdata', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              title: document.getElementById("title").value,
+              blogdata: JSON.stringify(output),
+              author: author,
+              key: key,
+              draft: false,
+              covimg: document.getElementById("imageResult").src,
+            }),
+          });
+        });
+    }
+  </script>
+  <script src="/draft/main.js"></script>
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <a href="/" class="logo d-flex align-items-center" style="text-decoration: none;">
+              <img src="/draft/img/logo.png" alt="" />
+              <span>Blogr</span>
+            </a>
+            <p>
+              A free open-source platform to share your ideas with the world and grow together.
+            </p>
+            <div class="social-links mt-3">
+              <a href="https://twitter.com/MridulMittal20" class="twitter"><i class="bi bi-twitter"
+                  style="color: black"></i></a>
+              <a href="https://www.facebook.com/mridul.mittal.90" class="facebook"><i class="bi bi-facebook"
+                  style="color: black"></i></a>
+              <a href="https://www.instagram.com/mridul_2008/" class="instagram"><i class="bi bi-instagram"
+                  style="color: black"></i></a>
+              <a href="https://www.linkedin.com/in/mridul-mittal-6463231a8/" class="linkedin"><i class="bi bi-linkedin"
+                  style="color: black"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-7 col-6 footer-links">
+            <div class="copyright">
+              &copy; Copyright <strong><span>Blogr</span></strong>. All Rights Reserved
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+</body>
+
+</html>
