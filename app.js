@@ -9,6 +9,10 @@ const passport = require("passport");
 const passporLocalMongoose = require("passport-local-mongoose");
 const { response } = require("express");
 const nodemailer = require('nodemailer');
+const fileUpload = require("express-fileupload");
+const { receiveMessageOnPort } = require("worker_threads");
+const cloudinary = require("cloudinary").v2;
+
 
 const app = express();
 
@@ -17,8 +21,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-app.use(
-  session({
+app.use(session({
     secret: "Mridul Mittal",
     resave: false,
     saveUninitialized: false,
@@ -62,6 +65,13 @@ const User = mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+cloudinary.config({ 
+  cloud_name: 'dru14xtia', 
+  api_key: '484365817547376', 
+  api_secret: 'd_qbVAh3Qkm7uAL5rJsajI3g2ag',
+  secure: true 
+});
 
 
 app.get("/test", function (req, res) {
@@ -111,6 +121,7 @@ app.get("/profile/:username", function (req, res) {
 });
 
 app.get("/", function (req, res) {
+  console.log("np req");
   Blog.find({}, function (err, result) {
 
     var sendres = result.splice(0, 3);
@@ -159,35 +170,100 @@ app.get("/draft/:author/:key", function (req, res) {
 });
 
 app.get("/view/:author/:key", function (req, res) {
-  Blog.find({ key: req.params.key }, function (err, result) {
-    console.log(result);
-    if (result.length == 0)
-      return res.render("blogview", {
-        author: req.params.author,
-        key: req.params.key,
-        data: null,
-        title: null,
-        covimg: "",
-      });
-    else {
-      Blog.update(
-        { key: req.params.key },
-        { $inc: { views: 1 } },
-        function (erro) {
-          if (erro) console.log(erro);
+
+  if(req.isAuthenticated())
+  {
+    User.find({username : req.user.username },function(err,resu){
+      let bkmark = 0;
+      for(var i=0;i<resu[0].favourite.length;i++)
+        if(resu[0].favourite[i] == req.params.key)
+          bkmark = 1;
+      Blog.find({ key: req.params.key }, function (err, result) {
+        if (result.length == 0)
+          return res.render("blogview", {
+            author: req.params.author,
+            key: req.params.key,
+            data: null,
+            title: null,
+            covimg: "",
+            bkmark : 0
+          });
+        else {
+          Blog.update(
+            { key: req.params.key },
+            { $inc: { views: 1 } },
+            function (erro) {
+              if (erro) console.log(erro);
+            }
+          );
+          return res.render("blogview", {
+            author: req.params.author,
+            key: req.params.key,
+            data: result[0].body,
+            title: result[0].title,
+            covimg: result[0].covimg,
+            bkmark: bkmark
+          });
         }
-      );
-      console.log("hello");
-      console.log(result[0].views);
-      return res.render("blogview", {
-        author: req.params.author,
-        key: req.params.key,
-        data: result[0].body,
-        title: result[0].title,
-        covimg: result[0].covimg,
       });
-    }
-  });
+    });
+  }
+  else
+  {
+    Blog.find({ key: req.params.key }, function (err, result) {
+      if (result.length == 0)
+        return res.render("blogview", {
+          author: req.params.author,
+          key: req.params.key,
+          data: null,
+          title: null,
+          covimg: "",
+          bkmark : 0
+        });
+      else {
+        Blog.update(
+          { key: req.params.key },
+          { $inc: { views: 1 } },
+          function (erro) {
+            if (erro) console.log(erro);
+          }
+        );
+        return res.render("blogview", {
+          author: req.params.author,
+          key: req.params.key,
+          data: result[0].body,
+          title: result[0].title,
+          covimg: result[0].covimg,
+          bkmark: 0
+        });
+      }
+    });
+  }
+});
+
+app.post("/bookmark",function(req,res){
+  console.log("post req")
+  if(req.isAuthenticated())
+  {
+    console.log("lgn post req");
+    var usern = req.user.username;
+    console.log(usern);
+
+    User.findOneAndUpdate({username:usern ,favourite: { $in : [req.body.key]}} , { $pull : {favourite : req.body.key}},function(err,suc){
+      if(!suc)
+      {
+        User.findOneAndUpdate({username:usern} , { $push : {favourite : req.body.key}},
+          function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(success);
+                }
+            });
+      }
+    });
+  }
+  
 });
 
 app.get("/delete/:author/:key", function (req, res) {
@@ -298,40 +374,50 @@ app.post("/saveblogdata", function (req, res) {
     if (err) console.log(err);
     if (result.length == 0) {
       console.log("hello");
-      var newblog = new Blog({
-        key: req.body.key,
-        title: req.body.title,
-        body: String(req.body.blogdata),
-        tag: ["1", "2"],
-        author: req.body.author,
-        draft: req.body.draft,
-        covimg: req.body.covimg,
-        lastUpdateTime: time,
-        views: 0
+      // upload image ot cloudinary
+      // console.log("IMAGE");
+      const imgFile = req.body.covimg;
+      // console.log(imgFile);
+      cloudinary.uploader.upload(imgFile,function(err,resu){
+          // console.log(resu);
+          var newblog = new Blog({
+            key: req.body.key,
+            title: req.body.title,
+            body: String(req.body.blogdata),
+            tag: ["1", "2"],
+            author: req.body.author,
+            draft: req.body.draft,
+            covimg: resu.url,
+            lastUpdateTime: time,
+            views: 0
+          });
+          newblog.save();
+          User.updateMany(
+            { username: req.body.author },
+            { $push: { blogs: req.body.key }, $inc: { cnt: 1 } },
+            function (erro) {
+              if (erro) console.log(erro);
+            }
+          );
       });
-      newblog.save();
-      User.updateMany(
-        { username: req.body.author },
-        { $push: { blogs: req.body.key }, $inc: { cnt: 1 } },
-        function (erro) {
-          if (erro) console.log(erro);
-        }
-      );
     } else {
-      Blog.update(
-        { key: req.body.key },
-        {
-          title: req.body.title,
-          body: req.body.blogdata,
-          tag: ["1", "2"],
-          draft: req.body.draft,
-          covimg: req.body.covimg,
-          lastUpdateTime: time,
-        },
-        function (err) {
-          if (err) console.log(err);
-        }
-      );
+      const imgFile = req.body.covimg;
+      cloudinary.uploader.upload(imgFile,function(err,resu){     
+        Blog.update(
+          { key: req.body.key },
+          {
+            title: req.body.title,
+            body: req.body.blogdata,
+            tag: ["1", "2"],
+            draft: req.body.draft,
+            covimg: resu.url,
+            lastUpdateTime: time,
+          },
+          function (err) {
+            if (err) console.log(err);
+          }
+        );      
+      }); 
     }
   });
 });
@@ -480,6 +566,9 @@ app.post("/updateprofile", function (req, res) {
   });
 });
 
+app.get("/xyz",function(req,res){
+  console.log("hnp req");
+});
 app.listen("3000", function () {
   console.log("Server started at port 3000");
 });

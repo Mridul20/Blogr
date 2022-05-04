@@ -51,6 +51,7 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
     </div>
+    <div>    
   </header>
   <!-- End Header -->
 
@@ -94,9 +95,24 @@
     }
   </script>
   <!-- <script src="audio.js" ></script> -->
-  <section id="secid">
-    <form action="/" method="GET" class="">
+  
 
+  <script>
+    function getdata()
+    {
+      console.log("onclick working");
+      fetch('/bookmark', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              key: key,
+            }),
+          });
+    }
+  </script>
+  <section id="secid">
       <div id="editorjs" class="des">
         <div class="container py-5 " style="float: none;">
           <div class="image-area mt-4 crp">
@@ -110,15 +126,11 @@
         </div>
 
       </div>
-      <!-- <div style="text-align: center;">
-        <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>
-        <button type="submit" onclick="draftdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Draft</button>
-      </div> -->
-      <!-- <button type="submit" onclick="publishdata()" class="btn">Publish</button>
-      <button class="btn" onclick="draftdata()"> Draft </button> -->
       <br><br>
-    </form>
-
+      <div>
+          <button onclick="getdata()">Bookmark</button>
+      <h1> <%= bkmark %></h1></div>
+      </div>
   </section>
 
   <script>
@@ -216,7 +228,6 @@
     }
   </script>
   <script src="/draft/main.js"></script>
-  <script src="/draft/audio.js"></script>
 
 
 
