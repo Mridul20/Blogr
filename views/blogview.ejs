@@ -34,6 +34,7 @@
 
 <body>
   <!-- header-->
+  
   <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
       <a href="/" class="logo d-flex align-items-center" style="text-decoration: none;">
@@ -101,6 +102,9 @@
     function getdata()
     {
       console.log("onclick working");
+      const myElement = document.getElementById("demo");
+      myElement.classList.toggle('bookmarkRibbon');
+      myElement.classList.toggle('unbookmarkRibbon');
       fetch('/bookmark', {
             method: 'POST',
             headers: {
@@ -114,6 +118,7 @@
   </script>
   <section id="secid">
       <div id="editorjs" class="des">
+        <div class="unbookmarkRibbon" id = "demo" style="margin-bottom: 10px;" onclick="getdata()"> </div>
         <div class="container py-5 " style="float: none;">
           <div class="image-area mt-4 crp">
             <img id="imageResult" alt="" class="img-fluid rounded shadow-sm mx-auto d-block ">
@@ -132,6 +137,15 @@
       <h1> <%= bkmark %></h1></div>
       </div>
   </section>
+
+  <script>
+    let bk = '<%= bkmark %>';
+    if( bk == 1) {
+      const myElement = document.getElementById("demo");
+      myElement.classList.toggle('bookmarkRibbon');
+      myElement.classList.toggle('unbookmarkRibbon');
+    }
+  </script>
 
   <script>
     let author = '<%-author%>'

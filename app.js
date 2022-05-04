@@ -8,11 +8,10 @@ const session = require("express-session");
 const passport = require("passport");
 const passporLocalMongoose = require("passport-local-mongoose");
 const { response } = require("express");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload");
 const { receiveMessageOnPort } = require("worker_threads");
 const cloudinary = require("cloudinary").v2;
-
 
 const app = express();
 
@@ -21,7 +20,8 @@ app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-app.use(session({
+app.use(
+  session({
     secret: "Mridul Mittal",
     resave: false,
     saveUninitialized: false,
@@ -44,7 +44,7 @@ const blogSchema = {
   draft: Boolean,
   covimg: String,
   views: Number,
-  lastUpdateTime: String
+  lastUpdateTime: String,
 };
 
 const userSchema = new mongoose.Schema({
@@ -66,13 +66,12 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-cloudinary.config({ 
-  cloud_name: 'dru14xtia', 
-  api_key: '484365817547376', 
-  api_secret: 'd_qbVAh3Qkm7uAL5rJsajI3g2ag',
-  secure: true 
+cloudinary.config({
+  cloud_name: "dru14xtia",
+  api_key: "484365817547376",
+  api_secret: "d_qbVAh3Qkm7uAL5rJsajI3g2ag",
+  secure: true,
 });
-
 
 app.get("/test", function (req, res) {
   res.render("test", { value: 4 });
@@ -112,10 +111,10 @@ app.get("/profile/:username", function (req, res) {
           address: result[0].address,
           mobile: result[0].mobile,
           email: result[0].email,
-          favblog: ans
+          favblog: ans,
         };
         return res.render("profile", data);
-      })
+      });
     });
   });
 });
@@ -123,15 +122,23 @@ app.get("/profile/:username", function (req, res) {
 app.get("/", function (req, res) {
   console.log("np req");
   Blog.find({}, function (err, result) {
-
     var sendres = result.splice(0, 3);
 
     // console.log(sendres.length);
     if (req.isAuthenticated())
-      return res.render("home", { login: true, username: req.user.username, message: req.query.message, topblog: sendres });
+      return res.render("home", {
+        login: true,
+        username: req.user.username,
+        message: req.query.message,
+        topblog: sendres,
+      });
     else
-      return res.render("home", { login: false, message: req.query.message, topblog: sendres });
-  }).sort({ "views": -1 });
+      return res.render("home", {
+        login: false,
+        message: req.query.message,
+        topblog: sendres,
+      });
+  }).sort({ views: -1 });
 });
 
 app.get("/login", function (req, res) {
@@ -170,14 +177,11 @@ app.get("/draft/:author/:key", function (req, res) {
 });
 
 app.get("/view/:author/:key", function (req, res) {
-
-  if(req.isAuthenticated())
-  {
-    User.find({username : req.user.username },function(err,resu){
+  if (req.isAuthenticated()) {
+    User.find({ username: req.user.username }, function (err, resu) {
       let bkmark = 0;
-      for(var i=0;i<resu[0].favourite.length;i++)
-        if(resu[0].favourite[i] == req.params.key)
-          bkmark = 1;
+      for (var i = 0; i < resu[0].favourite.length; i++)
+        if (resu[0].favourite[i] == req.params.key) bkmark = 1;
       Blog.find({ key: req.params.key }, function (err, result) {
         if (result.length == 0)
           return res.render("blogview", {
@@ -186,7 +190,7 @@ app.get("/view/:author/:key", function (req, res) {
             data: null,
             title: null,
             covimg: "",
-            bkmark : 0
+            bkmark: 0,
           });
         else {
           Blog.update(
@@ -202,14 +206,12 @@ app.get("/view/:author/:key", function (req, res) {
             data: result[0].body,
             title: result[0].title,
             covimg: result[0].covimg,
-            bkmark: bkmark
+            bkmark: bkmark,
           });
         }
       });
     });
-  }
-  else
-  {
+  } else {
     Blog.find({ key: req.params.key }, function (err, result) {
       if (result.length == 0)
         return res.render("blogview", {
@@ -218,7 +220,7 @@ app.get("/view/:author/:key", function (req, res) {
           data: null,
           title: null,
           covimg: "",
-          bkmark : 0
+          bkmark: 0,
         });
       else {
         Blog.update(
@@ -234,61 +236,72 @@ app.get("/view/:author/:key", function (req, res) {
           data: result[0].body,
           title: result[0].title,
           covimg: result[0].covimg,
-          bkmark: 0
+          bkmark: 0,
         });
       }
     });
   }
 });
 
-app.post("/bookmark",function(req,res){
-  console.log("post req")
-  if(req.isAuthenticated())
-  {
-    console.log("lgn post req");
+app.post("/bookmark", function (req, res) {
+  console.log("post req");
+  if (req.isAuthenticated()) {
     var usern = req.user.username;
-    console.log(usern);
-
-    User.findOneAndUpdate({username:usern ,favourite: { $in : [req.body.key]}} , { $pull : {favourite : req.body.key}},function(err,suc){
-      if(!suc)
-      {
-        User.findOneAndUpdate({username:usern} , { $push : {favourite : req.body.key}},
-          function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log(success);
-                }
-            });
+    User.findOneAndUpdate(
+      { username: usern, favourite: { $in: [req.body.key] } },
+      { $pull: { favourite: req.body.key } },
+      function (err, suc) {
+        if (!suc) {
+          User.findOneAndUpdate(
+            { username: usern },
+            { $push: { favourite: req.body.key } },
+            function (error, success) {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log(success);
+              }
+            }
+          );
+        }
       }
-    });
+    );
   }
-  
+});
+
+app.get("/unbookmark/:key", function (req, res) {
+  var usern = req.user.username;
+  User.findOneAndUpdate(
+    { username: usern },
+    { $pull: { favourite: req.params.key } },
+    function (err, suc) {
+      if (err) console.log(err);
+      else res.redirect("/profile/" + usern);
+    }
+  );
 });
 
 app.get("/delete/:author/:key", function (req, res) {
-
   Blog.deleteOne({ key: req.params.key }, function (err) {
-    if (err)
-      console.log(err);
+    if (err) console.log(err);
   });
-  User.update({ username: req.params.author }, { $pull: { blogs: req.params.key } }, function (err) {
-    if (err)
-      console.log(err);
-  });
+  User.update(
+    { username: req.params.author },
+    { $pull: { blogs: req.params.key } },
+    function (err) {
+      if (err) console.log(err);
+    }
+  );
 
   res.redirect("/profile/" + req.params.author);
-})
+});
 app.get("/edit", function (req, res) {
   const author = req.user.username;
   User.find({ username: author }, function (err, result) {
-
-    var key = author + (result[0].cnt);
+    var key = author + result[0].cnt;
     return res.redirect("/draft/" + author + "/" + key);
   });
 });
-
-
 
 app.get("/display/:author/:key", function (req, res) {
   Blog.find({ key: req.params.key }, function (err, result) {
@@ -357,14 +370,24 @@ app.get("/gentext/:key", function (req, res) {
 });
 
 app.post("/saveblogdata", function (req, res) {
-
-  const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.",
-    "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."
+  const monthNames = [
+    "Jan.",
+    "Feb.",
+    "Mar.",
+    "Apr.",
+    "May",
+    "Jun.",
+    "Jul.",
+    "Aug.",
+    "Sep.",
+    "Oct.",
+    "Nov.",
+    "Dec.",
   ];
   const ts = Date.now();
   const date_ob = new Date(ts);
-  const date = (date_ob.getDate());
-  const month = (date_ob.getMonth() + 1);
+  const date = date_ob.getDate();
+  const month = date_ob.getMonth() + 1;
   const year = date_ob.getFullYear();
 
   const time = monthNames[month - 1] + " " + date + "," + year;
@@ -378,31 +401,31 @@ app.post("/saveblogdata", function (req, res) {
       // console.log("IMAGE");
       const imgFile = req.body.covimg;
       // console.log(imgFile);
-      cloudinary.uploader.upload(imgFile,function(err,resu){
-          // console.log(resu);
-          var newblog = new Blog({
-            key: req.body.key,
-            title: req.body.title,
-            body: String(req.body.blogdata),
-            tag: ["1", "2"],
-            author: req.body.author,
-            draft: req.body.draft,
-            covimg: resu.url,
-            lastUpdateTime: time,
-            views: 0
-          });
-          newblog.save();
-          User.updateMany(
-            { username: req.body.author },
-            { $push: { blogs: req.body.key }, $inc: { cnt: 1 } },
-            function (erro) {
-              if (erro) console.log(erro);
-            }
-          );
+      cloudinary.uploader.upload(imgFile, function (err, resu) {
+        // console.log(resu);
+        var newblog = new Blog({
+          key: req.body.key,
+          title: req.body.title,
+          body: String(req.body.blogdata),
+          tag: ["1", "2"],
+          author: req.body.author,
+          draft: req.body.draft,
+          covimg: resu.url,
+          lastUpdateTime: time,
+          views: 0,
+        });
+        newblog.save();
+        User.updateMany(
+          { username: req.body.author },
+          { $push: { blogs: req.body.key }, $inc: { cnt: 1 } },
+          function (erro) {
+            if (erro) console.log(erro);
+          }
+        );
       });
     } else {
       const imgFile = req.body.covimg;
-      cloudinary.uploader.upload(imgFile,function(err,resu){     
+      cloudinary.uploader.upload(imgFile, function (err, resu) {
         Blog.update(
           { key: req.body.key },
           {
@@ -416,8 +439,8 @@ app.post("/saveblogdata", function (req, res) {
           function (err) {
             if (err) console.log(err);
           }
-        );      
-      }); 
+        );
+      });
     }
   });
 });
@@ -482,9 +505,17 @@ app.get("/search/:query", function (req, res) {
     function (err, result) {
       console.log(result);
       if (req.isAuthenticated())
-        return res.render("search", { login: true, username: req.user.username, result: result });
+        return res.render("search", {
+          login: true,
+          username: req.user.username,
+          result: result,
+        });
       else
-        return res.render("search", { login: false, message: req.query.message, result: result });
+        return res.render("search", {
+          login: false,
+          message: req.query.message,
+          result: result,
+        });
     }
   ).sort({ views: -1 });
 });
@@ -494,44 +525,47 @@ app.post("/search", function (req, res) {
   return res.redirect("/search/" + query);
 });
 app.post("/contact", function (req, res) {
-  const data = req.body
+  const data = req.body;
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: 'spotr.iiita@gmail.com',
-      pass: 'spotr@1234'
-    }
+      user: "spotr.iiita@gmail.com",
+      pass: "spotr@1234",
+    },
   });
 
   var mailOptions = {
     from: `spotr.iiita@gmail.com`,
-    to: 'spotr.iiita@gmail.com',
+    to: "spotr.iiita@gmail.com",
     subject: `${data.subject},blogr query`,
     text: `
       ${data.message} .
       Name :${data.name}
-      Email Id: ${data.email}`
+      Email Id: ${data.email}`,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      return res.redirect(url.format({
-        pathname: "/",
-        query: {
-          message: "Email not Sent"
-        }
-      }));
-    }
-    else {
-      return res.redirect(url.format({
-        pathname: "/",
-        query: {
-          message: "Email sent successfully"
-        }
-      }));
+      return res.redirect(
+        url.format({
+          pathname: "/",
+          query: {
+            message: "Email not Sent",
+          },
+        })
+      );
+    } else {
+      return res.redirect(
+        url.format({
+          pathname: "/",
+          query: {
+            message: "Email sent successfully",
+          },
+        })
+      );
     }
   });
-})
+});
 
 app.post("/updateprofile", function (req, res) {
   const username = req.user.username;
@@ -539,34 +573,29 @@ app.post("/updateprofile", function (req, res) {
     console.log(result);
     console.log(req.body);
     var email;
-    if (req.body.email == '')
-      email = result[0].email;
-    else
-      email = req.body.email;
+    if (req.body.email == "") email = result[0].email;
+    else email = req.body.email;
     var address;
-    if (req.body.address == '')
-      address = result[0].address;
-    else
-      address = req.body.address;
+    if (req.body.address == "") address = result[0].address;
+    else address = req.body.address;
     var mobile;
-    if (req.body.mobile == '')
-      mobile = result[0].mobile;
-    else
-      mobile = req.body.mobile;
+    if (req.body.mobile == "") mobile = result[0].mobile;
+    else mobile = req.body.mobile;
     var fullname;
-    if (req.body.fullname == '')
-      fullname = result[0].fullname;
-    else
-      fullname = req.body.fullname;
-    User.update({ username, username }, { fullname: fullname, mobile: mobile, address: address, email: email }, function (erro) {
-      if (erro)
-        console.log(erro);
-      res.redirect("/profile/" + username);
-    });
+    if (req.body.fullname == "") fullname = result[0].fullname;
+    else fullname = req.body.fullname;
+    User.update(
+      { username, username },
+      { fullname: fullname, mobile: mobile, address: address, email: email },
+      function (erro) {
+        if (erro) console.log(erro);
+        res.redirect("/profile/" + username);
+      }
+    );
   });
 });
 
-app.get("/xyz",function(req,res){
+app.get("/xyz", function (req, res) {
   console.log("hnp req");
 });
 app.listen("3000", function () {
