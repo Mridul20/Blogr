@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +29,15 @@
   <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
   <title>Draft - <%= author %>
   </title>
+  <script type="text/javascript">
+
+    function changeFunc() {
+     var selectBox = document.getElementById("selectBox");
+     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+     console.log(selectedValue);
+    }
+  
+   </script>
 </head>
 
 <body>
@@ -93,7 +103,7 @@
 
   <section id="secid">
     <!-- border border-secondary -->
-    <form action="/" method="GET" class="">
+    <!-- <form action="/" method="GET" class=""> -->
 
       <!-- Private Public Toggle -->
       <!-- <div class="switch-button">
@@ -118,8 +128,49 @@
         <div class="container">
           <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
         </div>
-
       </div>
+
+
+
+
+
+      <script>
+        function check()
+        {
+          var selectedValue = taglist.options;
+          console.log(selectedValue);
+        }
+      </script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+      <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+      
+        <select data-placeholder="Begin typing a name to filter..." multiple class="chosen-select" id = "taglist" name="test">
+          <option value=""></option>
+          <option>American Black Bear</option>
+          <option>Asiatic Black Bear</option>
+          <option>Brown Bear</option>
+          <option>Giant Panda</option>
+          <option>Sloth Bear</option>
+          <option>Sun Bear</option>
+          <option>Polar Bear</option>
+          <option>Spectacled Bear</option>
+        </select>
+      <button onclick="check()">aa</button>
+      
+      <script> 
+      $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+      })
+      </script>
+
+
+
+
+
+
+
       <div style="text-align: center;">
         <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>
         <button type="submit" onclick="draftdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Draft</button>
@@ -127,7 +178,7 @@
       <!-- <button type="submit" onclick="publishdata()" class="btn">Publish</button>
       <button class="btn" onclick="draftdata()"> Draft </button> -->
       <br><br>
-    </form>
+    <!-- </form> -->
 
   </section>
 
