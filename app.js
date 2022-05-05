@@ -174,7 +174,7 @@ app.get("/draft/:author/:key", function (req, res) {
         title: result[0].title,
         covimg: result[0].covimg,
         tag : result[0].tag,
-        txtdata : result[0].txdata,
+        txtdata : result[0].txtdata,
       });
   });
 });
@@ -195,7 +195,7 @@ app.get("/view/:author/:key", function (req, res) {
             covimg: "",
             bkmark: 0,
             tag : [],
-            txdata : "",
+            txtdata : "",
           });
         else {
           Blog.update(
@@ -445,7 +445,7 @@ app.post("/saveblogdata", function (req, res) {
   for (var i = 0; i < jsonbody.blocks.length; i++)
     txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
 
-
+  console.log(txtdata);
 
   Blog.find({ key: req.body.key }, function (err, result) {
     if (err) console.log(err);
@@ -456,14 +456,13 @@ app.post("/saveblogdata", function (req, res) {
           key: req.body.key,
           title: req.body.title,
           body: String(req.body.blogdata),
-          tag: ["1", "2"],
           author: req.body.author,
           draft: req.body.draft,
           covimg: resu.url,
           lastUpdateTime: time,
           views: 0,
           tag : req.body.tag,
-          txdata : txtdata,
+          txtdata : txtdata,
         });
         newblog.save();
         User.updateMany(
@@ -487,7 +486,7 @@ app.post("/saveblogdata", function (req, res) {
             covimg: resu.url,
             lastUpdateTime: time,
             tag : req.body.tag,
-            txdata : txtdata,
+            txtdata : txtdata,
           },
           function (err) {
             if (err) console.log(err);
