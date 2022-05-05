@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+  
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +27,7 @@
   <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <title>Draft - <%= author %>
+  <title><%=title%>
 
   </title>
 </head>
@@ -132,9 +132,18 @@
 
       </div>
       <br><br>
-      <div>
-          <button onclick="getdata()">Bookmark</button>
-      <h1> <%= bkmark %></h1></div>
+      <div style = "display: flex;justify-content: right;text-align: center;">
+        
+        <% for(let i=0; i<tag.length ;i++) { %>
+          <span class = "rcorners2"> <%= tag[i] %> </span>
+        <% } %>
+        <!-- <span class = "rcorners2"> Item 1</span>
+        <span class = "rcorners2"> Item 1</span>
+
+        <span class = "rcorners2"> Item 1</span>
+        <span class = "rcorners2"> Item 1</span>
+        <span class = "rcorners2"> Item 1</span>
+        <span class = "rcorners2"> Item 1</span> -->
       </div>
   </section>
 
@@ -154,7 +163,6 @@
 
     if (data) {
       editor = loadeditordata(data);
-      console.log(data);
       document.getElementById("title").value = '<%-title%>';
       document.getElementById("imageResult").src = '<%-covimg%>';
     }

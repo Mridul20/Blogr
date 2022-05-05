@@ -2252,3 +2252,12 @@ body{
   border-right: 12px solid grey; 
   border-bottom: 7px solid transparent; 
 }
+
+.rcorners2 {
+  border-radius: 20%;
+  background: #79A8C2;
+  padding: .75%;
+  margin-left: 5px;
+  width: 5%;
+  height: 2%;
+}

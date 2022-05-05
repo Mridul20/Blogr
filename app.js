@@ -73,9 +73,6 @@ cloudinary.config({
   secure: true,
 });
 
-app.get("/test", function (req, res) {
-  res.render("test", { value: 4 });
-});
 
 app.get("/python", (req, res) => {
   var dataToSend;
@@ -164,6 +161,7 @@ app.get("/draft/:author/:key", function (req, res) {
         data: null,
         title: null,
         covimg: "",
+        tag : [],
       });
     else
       return res.render("draft", {
@@ -172,6 +170,7 @@ app.get("/draft/:author/:key", function (req, res) {
         data: result[0].body,
         title: result[0].title,
         covimg: result[0].covimg,
+        tag : result[0].tag,
       });
   });
 });
@@ -191,6 +190,7 @@ app.get("/view/:author/:key", function (req, res) {
             title: null,
             covimg: "",
             bkmark: 0,
+            tag : [],
           });
         else {
           Blog.update(
@@ -206,12 +206,14 @@ app.get("/view/:author/:key", function (req, res) {
             data: result[0].body,
             title: result[0].title,
             covimg: result[0].covimg,
+            tag : result[0].tag,
             bkmark: bkmark,
           });
         }
       });
     });
-  } else {
+  } 
+  else {
     Blog.find({ key: req.params.key }, function (err, result) {
       if (result.length == 0)
         return res.render("blogview", {
@@ -221,6 +223,7 @@ app.get("/view/:author/:key", function (req, res) {
           title: null,
           covimg: "",
           bkmark: 0,
+          tag : [],
         });
       else {
         Blog.update(
@@ -236,6 +239,7 @@ app.get("/view/:author/:key", function (req, res) {
           data: result[0].body,
           title: result[0].title,
           covimg: result[0].covimg,
+          tag : result[0].tag,
           bkmark: 0,
         });
       }
@@ -393,16 +397,10 @@ app.post("/saveblogdata", function (req, res) {
   const time = monthNames[month - 1] + " " + date + "," + year;
 
   Blog.find({ key: req.body.key }, function (err, result) {
-    console.log(result[0]);
     if (err) console.log(err);
     if (result.length == 0) {
-      console.log("hello");
-      // upload image ot cloudinary
-      // console.log("IMAGE");
       const imgFile = req.body.covimg;
-      // console.log(imgFile);
       cloudinary.uploader.upload(imgFile, function (err, resu) {
-        // console.log(resu);
         var newblog = new Blog({
           key: req.body.key,
           title: req.body.title,
@@ -413,6 +411,7 @@ app.post("/saveblogdata", function (req, res) {
           covimg: resu.url,
           lastUpdateTime: time,
           views: 0,
+          tag : req.body.tag,
         });
         newblog.save();
         User.updateMany(
@@ -423,7 +422,8 @@ app.post("/saveblogdata", function (req, res) {
           }
         );
       });
-    } else {
+    } 
+    else {
       const imgFile = req.body.covimg;
       cloudinary.uploader.upload(imgFile, function (err, resu) {
         Blog.update(
@@ -431,10 +431,10 @@ app.post("/saveblogdata", function (req, res) {
           {
             title: req.body.title,
             body: req.body.blogdata,
-            tag: ["1", "2"],
             draft: req.body.draft,
             covimg: resu.url,
             lastUpdateTime: time,
+            tag : req.body.tag,
           },
           function (err) {
             if (err) console.log(err);

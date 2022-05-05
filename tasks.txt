@@ -1,7 +1,23 @@
 - audio to text
+
 - text to audio
-- reccomeendor(tag)
+
+- reccomendor(tag)
+
 - comments
+
 - online deploy
-- tag para
+
+
+
+
+login
+draft blog
+search blog
+bookmark
+trending blog
+tagging blogs
+view blog
+feedback (contact form)
+
 
