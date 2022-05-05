@@ -610,6 +610,6 @@ app.post("/updateprofile", function (req, res) {
 app.get("/xyz", function (req, res) {
   console.log("hnp req");
 });
-app.listen("3000", function () {
+app.listen(process.env.PORT || 3000, function(){
   console.log("Server started at port 3000");
 });
