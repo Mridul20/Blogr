@@ -81,7 +81,7 @@ html{
 
 .comment .avatar img{
     display: block;
-    border-radius: 50%;
+    border-radius: 0;
 }
 
 .comment.user-comment .avatar img{

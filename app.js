@@ -47,6 +47,7 @@ const blogSchema = {
   views: Number,
   lastUpdateTime: String,
   txtdata : String,
+  comments : Array,
 };
 
 const userSchema = new mongoose.Schema({
@@ -78,25 +79,6 @@ cloudinary.config({
 const allTagList = ["Advertising" , "Advice","America","Amor","Android","Animals","Apple","Architecture","Art", "Artificial intelligence","Astronomy","Beauty","Bitcoin","BlackLivesMatter Blockchain","Blogger","Blogging","Book review","Books","Branding","Brazil","Business","Business Strategy","Careers","Christianity","Climate Change","College","Comedy","Comics","Content Marketing","Cooking","Creativity","Cryptocurrency","Culture","Data science","Dating","Death","Depression","Design","Diversity","Donald Trump","Ecommerce","Economics","Edtech","Education","Education Reform","Elections","Employment","Energy","Entrepreneurship","Environment","Equality","Erotica","Facts","Faith","Fashion","Feminism","Fiction","Finance","Fitness","Food",  "Funny","Future","Gaming","Gender","God","Growth hacking","Happiness","Health","Healthcare","Hillary Clinton","History","Humor","Ideas","IFTTT","Income","India","Innovation","Inspiration","Instagram","Internet of Things","Investing","Islam","Java","Java script","Journalism","Law","Leadership","Learning","LGBTQ","Life","Life Lessons","Literature","Management","Marketing","Marriage","Media","Medium Brazil","Men","Mental Health","Metoo","Mindfulness","Mobile","Mobile App Development","Mobile apps","Money","Motivation","Music","News","Nutrition","Parenting","Personal","Personal Development","Personal growth","Personal stories","Philosophy","Photography","Photos","Physics","Podcast","Poesia","Politics","Pop culture","PPC Marketing","Privacy","Product Management","Productivity","Programming","Property","Prototyping","Psychology","Racism","Reading","Real estate","Relationships","Research","Review","Running","Russia","Russian",
 "Sales","Satire","Schools","Science","Science fiction","Security","Self","Self Driving Cars","Self Help","Self-awareness","SEO","Sex","Sexism","Sexuality","Short Story","Small Business","Social Media","Social Media Marketing","Space","Spanish","Spirituality","Sports","Startup","Success","Sustainability","Teaching","Tech","Technology","Television","This Happened To Me","Transportation","Travel","Trump","Twitter","USA","User","Experience","UX","Venture Capital","Vida","Video","Virtual Reality","Web","Web Design","Web development","Weight Loss","Wildlife","Women","Women In Tech","WordPress","Work","World"];
 
-
-
-app.get("/python", (req, res) => {
-  var dataToSend;
-  // spawn new child process to call the python script
-  const python = spawn("python", ["python/script.py", key]);
-  // collect data from script
-  python.stdout.on("data", function (data) {
-    console.log("Pipe data from python script ...");
-    dataToSend = data.toString();
-  });
-  // in close event we are sure that stream from child process is closed
-  python.on("close", (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    // send data to browser
-    console.log(dataToSend);
-    res.send(dataToSend);
-  });
-});
 
 app.get("/profile/:username", function (req, res) {
   console.log(req.params);
@@ -202,6 +184,8 @@ app.get("/view/:author/:key", function (req, res) {
             bkmark: 0,
             tag : [],
             txtdata : "",
+            comments : [],
+            loggedinuser : req.user.username, 
           });
         else {
           Blog.update(
@@ -221,6 +205,8 @@ app.get("/view/:author/:key", function (req, res) {
             tag : result[0].tag,
             bkmark: bkmark,
             txtdata : result[0].txtdata,
+            comments : result[0].comments,
+            loggedinuser : req.user.username, 
           });
         }
       });
@@ -238,6 +224,8 @@ app.get("/view/:author/:key", function (req, res) {
           bkmark: 0,
           tag : [],
           txtdata : "",
+          comments : [],
+          loggedinuser : "null", 
         });
       else {
         Blog.update(
@@ -256,6 +244,8 @@ app.get("/view/:author/:key", function (req, res) {
           tag : result[0].tag,
           bkmark: 0,
           txtdata : result[0].txtdata,
+          comments : result[0].comments,
+          loggedinuser : "null", 
         });
       }
     });
@@ -314,6 +304,47 @@ app.get("/delete/:author/:key", function (req, res) {
 
   res.redirect("/profile/" + req.params.author);
 });
+
+
+app.post("/postcomment/:author/:key",function(req,res){
+  if(req.isAuthenticated())
+  {
+    var comment = req.body.comment;
+    var usr = req.user.username;
+    var monthNames = [
+      "Jan.",
+      "Feb.",
+      "Mar.",
+      "Apr.",
+      "May",
+      "Jun.",
+      "Jul.",
+      "Aug.",
+      "Sep.",
+      "Oct.",
+      "Nov.",
+      "Dec.",
+    ];
+    var ts = Date.now();
+    var date_ob = new Date(ts);
+    var date = date_ob.getDate();
+    var month = date_ob.getMonth() + 1;
+    var year = date_ob.getFullYear();
+  
+    var time = monthNames[month - 1] + " " + date + "," + year;
+    newcomment = {text : comment , author : usr , time : time};
+    Blog.findOneAndUpdate({key:req.params.key},{$push : {comments : newcomment}},function(err,suc){
+      if(err)
+        console.log(err);
+    });
+    res.redirect("/view/" + req.params.author + "/" + req.params.key);
+  }
+  else
+    res.redirect("/login");
+
+});
+
+
 app.get("/edit", function (req, res) {
   const author = req.user.username;
   User.find({ username: author }, function (err, result) {
@@ -343,86 +374,6 @@ app.get("/display/:author/:key", function (req, res) {
       });
   });
 });
-app.get("/genaudio/:author/:key", function (req, res) {
-  var dataToSend;
-  const python = spawn("python", [
-    "python/txttoaudio.py",
-    req.params.key,
-    req.params.author,
-  ]);
-  python.stdout.on("data", function (data) {
-    console.log("Pipe data from python script ...");
-    dataToSend = data.toString();
-  });
-  python.on("close", (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-    console.log(dataToSend);
-    res.send(dataToSend);
-  });
-});
-
-app.get("/gentext/:key", function (req, res) {
-  Blog.find({ key: req.params.key }, function (err, result) {
-    if (err) console.log(err);
-    if (result.length == 0) res.send("No blog exists");
-    var txtdata = "Title .................. ";
-    const newpar = ".........................................";
-    txtdata =
-      txtdata +
-      result[0].title +
-      newpar +
-      "written by .................." +
-      result[0].author +
-      newpar;
-    const jsonbody = JSON.parse(result[0].body);
-    for (var i = 0; i < jsonbody.blocks.length; i++)
-      txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
-    // console.log(txtdata);
-    if (!fs.existsSync("bloggers")) fs.mkdirSync("bloggers");
-    const path = "bloggers/" + result[0].author;
-    if (!fs.existsSync(path)) fs.mkdirSync(path);
-    fs.writeFile(path + "/" + req.params.key + ".txt", txtdata, function (err) {
-      if (err) return console.log(err);
-    });
-    return res.redirect("/genaudio/" + result[0].author + "/" + req.params.key);
-  });
-});
-
-
-
-
-app.get('/tts',(req,res) => {
-  res.render('tts');
-})
- 
-// app.post('/tts',(req,res) => {
-//   var text = req.body.text
- 
-//   var language = req.body.language
- 
-//   outputFilePath = Date.now() + "output.mp3"
- 
-//   var voice = new gtts(text,language)
- 
-//   voice.save(outputFilePath,function(err,result){
-//     if(err){
-//       fs.unlinkSync(outputFilePath)
-//       res.send("Unable to convert to audio")
-//     }
-//     res.download(outputFilePath,(err) => {
-//       if(err){
-//         fs.unlinkSync(outputFilePath)
-//         res.send("Unable to download the file")
-//       }
- 
-//       fs.unlinkSync(outputFilePath)
-//     })
-//   })
-// })
-
-
-
-
 
 app.post("/saveblogdata", function (req, res) {
   const monthNames = [

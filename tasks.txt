@@ -1,12 +1,8 @@
-
 - tag css
-- audio css
-- voice asst css
-
 - comments
-- add tags
+- add tag (designing)
 - online deploy
-
+- view page author name top
 
 
 

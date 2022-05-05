@@ -338,76 +338,42 @@
 
     <ul class="comment-section">
 
-      <li class="comment user-comment">
+      <% for(var i=0;i<comments.length;i++) { %>
+
+
+
+        <% if(comments[i].author == loggedinuser) { %>
+          <li class="comment author-comment">
+        <% } else { %>
+          <li class="comment user-comment">
+        <% } %>
+
+
 
         <div class="info">
-          <a href="#">Anie Silverston</a>
-          <span>4 hours ago</span>
+          <a href="#"><%= comments[i].author %></a>
+          <span><% comments[i].time %></span>
         </div>
 
-        <a class="avatar" href="#">
-          <img src="images/avatar_user_1.jpg" width="35" alt="Profile Avatar" title="Anie Silverston" />
-        </a>
+        <span class="avatar" style = "border-radius: 0;" >
+          <img src="/draft/alphabetimg/<%=comments[i].author[0]%>.png" style = "border-radius: 0;" height="30px" width = "30px" alt="Profile Avatar" title=<%=comments[i].author%> />
+        </span>
 
-        <p>Suspendisse gravida sem?</p>
-
-      </li>
-
-      <li class="comment author-comment">
-
-        <div class="info">
-          <a href="#">Jack Smith</a>
-          <span>3 hours ago</span>
-        </div>
-
-        <a class="avatar" href="#">
-          <img src="images/avatar_author.jpg" width="35" alt="Profile Avatar" title="Jack Smith" />
-        </a>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse gravida sem sit amet molestie portitor.
-        </p>
+        <p><%= comments[i].text %></p>
 
       </li>
-
-      <li class="comment user-comment">
-
-        <div class="info">
-          <a href="#">Bradley Jones</a>
-          <span>1 hour ago</span>
-        </div>
-
-        <a class="avatar" href="#">
-          <img src="images/avatar_user_2.jpg" width="35" alt="Profile Avatar" title="Bradley Jones" />
-        </a>
-
-        <p>Suspendisse gravida sem sit amet molestie portitor?</p>
-
-      </li>
-
-      <li class="comment author-comment">
-
-        <div class="info">
-          <a href="#">Jack Smith</a>
-          <span>1 hour ago</span>
-        </div>
-
-        <a class="avatar" href="#">
-          <img src="images/avatar_author.jpg" width="35" alt="Profile Avatar" title="Jack Smith" />
-        </a>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisee gravida sem sit amet molestie porttitor.
-        </p>
-
-      </li>
+      <% } %> 
 
       <li class="write-new">
 
-        <form action="#" method="post">
+        <form action="/postcomment/<%= author %>/<%-key%>"  method="post">
 
           <textarea placeholder="Write your comment here" name="comment"></textarea>
 
           <div>
-            <img src="images/avatar_user_2.jpg" width="35" alt="Profile of Bradley Jones" title="Bradley Jones" />
+            <span class="avatar" style = "border-radius: 0;" >
+            <img src="/draft/alphabetimg/<%=loggedinuser[0]%>.png" style = "border-radius: 0;" height="10%" width = "10%"  title = <%=loggedinuser %>  />
+          </span>
             <button type="submit">Submit</button>
           </div>
 
