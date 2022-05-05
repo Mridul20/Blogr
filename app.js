@@ -12,6 +12,7 @@ const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload");
 const { receiveMessageOnPort } = require("worker_threads");
 const cloudinary = require("cloudinary").v2;
+const gtts = require('gtts')
 
 const app = express();
 
@@ -45,6 +46,7 @@ const blogSchema = {
   covimg: String,
   views: Number,
   lastUpdateTime: String,
+  txtdata : String,
 };
 
 const userSchema = new mongoose.Schema({
@@ -162,6 +164,7 @@ app.get("/draft/:author/:key", function (req, res) {
         title: null,
         covimg: "",
         tag : [],
+        txtdata : "",
       });
     else
       return res.render("draft", {
@@ -171,6 +174,7 @@ app.get("/draft/:author/:key", function (req, res) {
         title: result[0].title,
         covimg: result[0].covimg,
         tag : result[0].tag,
+        txtdata : result[0].txdata,
       });
   });
 });
@@ -191,6 +195,7 @@ app.get("/view/:author/:key", function (req, res) {
             covimg: "",
             bkmark: 0,
             tag : [],
+            txdata : "",
           });
         else {
           Blog.update(
@@ -208,6 +213,7 @@ app.get("/view/:author/:key", function (req, res) {
             covimg: result[0].covimg,
             tag : result[0].tag,
             bkmark: bkmark,
+            txtdata : result[0].txtdata,
           });
         }
       });
@@ -373,6 +379,42 @@ app.get("/gentext/:key", function (req, res) {
   });
 });
 
+
+
+
+app.get('/tts',(req,res) => {
+  res.render('tts');
+})
+ 
+// app.post('/tts',(req,res) => {
+//   var text = req.body.text
+ 
+//   var language = req.body.language
+ 
+//   outputFilePath = Date.now() + "output.mp3"
+ 
+//   var voice = new gtts(text,language)
+ 
+//   voice.save(outputFilePath,function(err,result){
+//     if(err){
+//       fs.unlinkSync(outputFilePath)
+//       res.send("Unable to convert to audio")
+//     }
+//     res.download(outputFilePath,(err) => {
+//       if(err){
+//         fs.unlinkSync(outputFilePath)
+//         res.send("Unable to download the file")
+//       }
+ 
+//       fs.unlinkSync(outputFilePath)
+//     })
+//   })
+// })
+
+
+
+
+
 app.post("/saveblogdata", function (req, res) {
   const monthNames = [
     "Jan.",
@@ -396,6 +438,15 @@ app.post("/saveblogdata", function (req, res) {
 
   const time = monthNames[month - 1] + " " + date + "," + year;
 
+  var txtdata = "Title .................. ";
+  const newpar = ".........................................";
+  txtdata =  txtdata +  req.body.title +  newpar + "written by .................." +  req.body.author +  newpar;
+  const jsonbody = JSON.parse(req.body.blogdata);
+  for (var i = 0; i < jsonbody.blocks.length; i++)
+    txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
+
+
+
   Blog.find({ key: req.body.key }, function (err, result) {
     if (err) console.log(err);
     if (result.length == 0) {
@@ -412,6 +463,7 @@ app.post("/saveblogdata", function (req, res) {
           lastUpdateTime: time,
           views: 0,
           tag : req.body.tag,
+          txdata : txtdata,
         });
         newblog.save();
         User.updateMany(
@@ -435,6 +487,7 @@ app.post("/saveblogdata", function (req, res) {
             covimg: resu.url,
             lastUpdateTime: time,
             tag : req.body.tag,
+            txdata : txtdata,
           },
           function (err) {
             if (err) console.log(err);

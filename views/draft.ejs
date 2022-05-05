@@ -105,13 +105,7 @@
 
   <section id="secid">
     <!-- border border-secondary -->
-    <!-- <form action="/" method="GET" class=""> -->
-
-      <!-- Private Public Toggle -->
-      <!-- <div class="switch-button">
-              <input class="switch-button-checkbox" type="checkbox" name = "diplay"></input>
-              <label class="switch-button-label" for=""><span class="switch-button-label-span">Public</span></label>
-            </div> -->
+    <form action="/" method="GET" class="">
 
       <!-- Image -->
       <div id="editorjs" class="des">
@@ -197,12 +191,14 @@ $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
 
       <div style="text-align: center;">
         <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>
-        <button type="submit" onclick="draftdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Draft</button>
+        <button onclick="draftdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Draft</button>
       </div>
+    </form>
       <!-- <button type="submit" onclick="publishdata()" class="btn">Publish</button>
       <button class="btn" onclick="draftdata()"> Draft </button> -->
       <br><br>
-    <!-- </form> -->
+    
+    
 
   </section>
 
@@ -269,6 +265,7 @@ $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
             }),
           });
         });
+    event.preventDefault();
     }
 
     function publishdata() {
