@@ -136,6 +136,36 @@
       <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
       <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 
+
+<!-- start -->
+
+
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 5%;">
+    
+      <h3>Voice Assitance</h3>
+      <div class="app" style="margin-top: 3.5%;"> 
+        <div class="row">
+          <div class="col-3"></div>
+          <div class="col-6" style="margin-right: 0%;">
+            <div class="input-single form-group shadow-textarea">
+              <textarea id="note-textarea" class="form-control z-depth-1" placeholder="Create a new note by typing or using voice recognition." rows="6"></textarea>
+            </div>
+          </div>
+          <div class="col-3" style="text-align: left; justify-content: center; align-content: center;">
+            <div style="margin-top: 7%;"><button  style = "background-color: #6C757D;"class="btn btn-primary" id="start-record-btn" title="Start Recording" onclick = "prel()">Start</button></div>
+        <div style="margin-top: 3%;"><button  style = "background-color: #6C757D;"class="btn btn-primary" id="pause-record-btn" title="Pause Recording" onclick = "prel()">Pause</button></div>
+          </div>
+        </div>
+    
+            
+      </div>
+      
+      </div>
+    </div>
+
+
+
 <!-- multiple dropdown -->
 <script>
   var tags = [];
@@ -150,16 +180,11 @@ function check()
     }
   }
 </script>
-<select data-placeholder="Begin typing a name to filter..." multiple="multiple" class="chosen-select" id = "taglist" name="test" onchange="check()">
+<select data-placeholder="Select Tags" multiple="multiple" class="chosen-select" id = "taglist" name="test" onchange="check()">
   <option value="0"></option>
-  <option value = "1">American Black Bear</option>
-  <option value = "2">Asiatic Black Bear</option>
-  <option value = "3">Brown Bear</option>
-  <option value = "4">Giant Panda</option>
-  <option value = "5">Sloth Bear</option>
-  <option value = "6">Sun Bear</option>
-  <option value = "7">Polar Bear</option>
-  <option value = "8">Spectacled Bear</option>
+  <% for(let i=0;i<alltag.length;i++) {%>
+  <option value = <%= alltag[i] %>><%= alltag[i] %></option>
+  <% } %>
 </select>
 
 <script>
@@ -184,23 +209,7 @@ function check()
 $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
 </script>
 
-<!-- start -->
 
-
-<div class="container">
-
-<h4>Voice Assitance</h4>
-<div class="app"> 
-    <div class="input-single">
-        <textarea id="note-textarea" placeholder="Create a new note by typing or using voice recognition." rows="6"></textarea>
-    </div>         
-    <button id="start-record-btn" title="Start Recording" onclick = "prel()">Start Recognition</button>
-    <button id="pause-record-btn" title="Pause Recording" onclick = "prel()">Pause Recognition</button>  
-</div>
-
-</div>
-
-<!-- end  -->
 
       <div style="text-align: center;">
         <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>

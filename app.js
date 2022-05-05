@@ -75,6 +75,10 @@ cloudinary.config({
   secure: true,
 });
 
+const allTagList = ["Advertising" , "Advice","America","Amor","Android","Animals","Apple","Architecture","Art", "Artificial intelligence","Astronomy","Beauty","Bitcoin","BlackLivesMatter Blockchain","Blogger","Blogging","Book review","Books","Branding","Brazil","Business","Business Strategy","Careers","Christianity","Climate Change","College","Comedy","Comics","Content Marketing","Cooking","Creativity","Cryptocurrency","Culture","Data science","Dating","Death","Depression","Design","Diversity","Donald Trump","Ecommerce","Economics","Edtech","Education","Education Reform","Elections","Employment","Energy","Entrepreneurship","Environment","Equality","Erotica","Facts","Faith","Fashion","Feminism","Fiction","Finance","Fitness","Food",  "Funny","Future","Gaming","Gender","God","Growth hacking","Happiness","Health","Healthcare","Hillary Clinton","History","Humor","Ideas","IFTTT","Income","India","Innovation","Inspiration","Instagram","Internet of Things","Investing","Islam","Java","Java script","Journalism","Law","Leadership","Learning","LGBTQ","Life","Life Lessons","Literature","Management","Marketing","Marriage","Media","Medium Brazil","Men","Mental Health","Metoo","Mindfulness","Mobile","Mobile App Development","Mobile apps","Money","Motivation","Music","News","Nutrition","Parenting","Personal","Personal Development","Personal growth","Personal stories","Philosophy","Photography","Photos","Physics","Podcast","Poesia","Politics","Pop culture","PPC Marketing","Privacy","Product Management","Productivity","Programming","Property","Prototyping","Psychology","Racism","Reading","Real estate","Relationships","Research","Review","Running","Russia","Russian",
+"Sales","Satire","Schools","Science","Science fiction","Security","Self","Self Driving Cars","Self Help","Self-awareness","SEO","Sex","Sexism","Sexuality","Short Story","Small Business","Social Media","Social Media Marketing","Space","Spanish","Spirituality","Sports","Startup","Success","Sustainability","Teaching","Tech","Technology","Television","This Happened To Me","Transportation","Travel","Trump","Twitter","USA","User","Experience","UX","Venture Capital","Vida","Video","Virtual Reality","Web","Web Design","Web development","Weight Loss","Wildlife","Women","Women In Tech","WordPress","Work","World"];
+
+
 
 app.get("/python", (req, res) => {
   var dataToSend;
@@ -165,6 +169,7 @@ app.get("/draft/:author/:key", function (req, res) {
         covimg: "",
         tag : [],
         txtdata : "",
+        alltag : allTagList,
       });
     else
       return res.render("draft", {
@@ -175,6 +180,7 @@ app.get("/draft/:author/:key", function (req, res) {
         covimg: result[0].covimg,
         tag : result[0].tag,
         txtdata : result[0].txtdata,
+        alltag : allTagList,
       });
   });
 });
