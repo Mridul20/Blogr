@@ -205,6 +205,7 @@ app.get("/view/:author/:key", function (req, res) {
               if (erro) console.log(erro);
             }
           );
+          console.log(result[0].txtdata);
           return res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
@@ -230,6 +231,7 @@ app.get("/view/:author/:key", function (req, res) {
           covimg: "",
           bkmark: 0,
           tag : [],
+          txtdata : "",
         });
       else {
         Blog.update(
@@ -247,6 +249,7 @@ app.get("/view/:author/:key", function (req, res) {
           covimg: result[0].covimg,
           tag : result[0].tag,
           bkmark: 0,
+          txtdata : result[0].txtdata,
         });
       }
     });

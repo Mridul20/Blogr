@@ -17,7 +17,7 @@ draft blog
 search blog
 bookmark
 trending blog
-tagging blogs
+tagging blogs (200+ tags)
 view blog
 feedback (contact form)
 
