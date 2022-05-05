@@ -27,6 +27,7 @@
   <link href="/draft/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
   <title>Draft - <%= author %>
   </title>
   <script type="text/javascript">
@@ -183,10 +184,23 @@ function check()
 $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
 </script>
 
+<!-- start -->
 
 
+<div class="container">
 
+<h4>Voice Assitance</h4>
+<div class="app"> 
+    <div class="input-single">
+        <textarea id="note-textarea" placeholder="Create a new note by typing or using voice recognition." rows="6"></textarea>
+    </div>         
+    <button id="start-record-btn" title="Start Recording" onclick = "prel()">Start Recognition</button>
+    <button id="pause-record-btn" title="Pause Recording" onclick = "prel()">Pause Recognition</button>  
+</div>
 
+</div>
+
+<!-- end  -->
 
       <div style="text-align: center;">
         <button type="submit" onclick="publishdata()" class="btn btn-secondary m-0 rounded-pill px-4 ">Publish</button>
@@ -200,8 +214,16 @@ $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
     
 
   </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/draft/app.js"></script>
 
   <script>
+    function prel()
+    {
+      event.preventDefault();
+    }
+
+
     let author = '<%-author%>'
     let key = '<%-key%>'
     let data = '<%-data%>'
@@ -237,6 +259,7 @@ $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
     console.log(key);
 
     function draftdata() {
+      
       if (!document.getElementById("title").value) {
         alert("Enter Blog Title");
         return;
@@ -264,7 +287,7 @@ $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!"})
             }),
           });
         });
-    event.preventDefault();
+        event.preventDefault();
     }
 
     function publishdata() {

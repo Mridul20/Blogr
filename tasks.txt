@@ -1,12 +1,10 @@
-- audio to text
 
 - tag css
 - audio css
-
-- reccomendor(tag)
+- voice asst css
 
 - comments
-
+- add tags
 - online deploy
 
 
@@ -20,5 +18,7 @@ trending blog
 tagging blogs (200+ tags)
 view blog
 feedback (contact form)
+text to audio
+voice assistance to write blog
 
 
