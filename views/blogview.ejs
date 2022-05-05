@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,14 +28,15 @@
   <link href="/draft/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/draft/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <title><%=title%>
+  <title>
+    <%=title%>
 
   </title>
 </head>
 
 <body>
   <!-- header-->
-  
+
 
   <header id="header" class="header fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
@@ -54,7 +55,7 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
     </div>
-    <div>    
+    <div>
   </header>
   <!-- End Header -->
 
@@ -98,60 +99,85 @@
     }
   </script>
   <!-- <script src="audio.js" ></script> -->
-  
+
 
   <script>
-    function getdata()
-    {
+    function getdata() {
       console.log("onclick working");
       const myElement = document.getElementById("demo");
       myElement.classList.toggle('bookmarkRibbon');
       myElement.classList.toggle('unbookmarkRibbon');
       fetch('/bookmark', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              key: key,
-            }),
-          });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          key: key,
+        }),
+      });
     }
   </script>
   <section id="secid">
-      <div id="editorjs" class="des">
-        <div class="unbookmarkRibbon" id = "demo" style="margin-bottom: 10px;" onclick="getdata()"> </div>
-        <div class="container py-5 " style="float: none;">
-          <div class="image-area mt-4 crp">
-            <img id="imageResult" alt="" class="img-fluid rounded shadow-sm mx-auto d-block ">
+    <div id="editorjs" class="des">
+      <div class="row">
+        <div class="col-6">
+          <div style="margin-left: 2.5%;">
+            <form action="#">
+              <div class="row" style="display:none;">
+                <label>Select Voice</label>
+                <div class="outer">
+                  <select id="lang"></select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-default" aria-label="Left Align">
+                <span aria-hidden="true"><img id="conv" src="/draft/img/play.png" width="45px" height="45px" /></span>
+              </button>
+
+              <!-- <button > <img src="/draft/img/play.png" alt=""> </button> -->
+            </form>
           </div>
+
         </div>
 
-        <!-- Title -->
-        <div class="container">
-          <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
+        <div class="col-6">
+          <div class="unbookmarkRibbon" id="demo" style="margin-bottom: 10px;" onclick="getdata()"> </div>
         </div>
-
       </div>
-      <br><br>
-      <div style = "display: flex;justify-content: right;text-align: center;">
-        
-        <% for(let i=0; i<tag.length ;i++) { %>
-          <span class = "rcorners2"> <%= tag[i] %> </span>
+
+      <div class="container py-5 " style="float: none;">
+        <div class="image-area mt-4 crp">
+          <img id="imageResult" alt="" class="img-fluid rounded shadow-sm mx-auto d-block ">
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="container">
+        <input class="blog-title" id="title" contenteditable="true" placeholder="Title" value="">
+      </div>
+
+    </div>
+    <br><br>
+    <div style="display: flex;justify-content: right;text-align: center;">
+
+      <% for(let i=0; i<tag.length ;i++) { %>
+        <span class="rcorners2">
+          <%= tag[i] %>
+        </span>
         <% } %>
-        <!-- <span class = "rcorners2"> Item 1</span>
+          <!-- <span class = "rcorners2"> Item 1</span>
         <span class = "rcorners2"> Item 1</span>
 
         <span class = "rcorners2"> Item 1</span>
         <span class = "rcorners2"> Item 1</span>
         <span class = "rcorners2"> Item 1</span>
         <span class = "rcorners2"> Item 1</span> -->
-      </div>
+    </div>
   </section>
 
   <script>
     let bk = '<%= bkmark %>';
-    if( bk == 1) {
+    if (bk == 1) {
       const myElement = document.getElementById("demo");
       myElement.classList.toggle('bookmarkRibbon');
       myElement.classList.toggle('unbookmarkRibbon');
@@ -253,68 +279,56 @@
   </script>
   <script src="/draft/main.js"></script>
 
-  <div >
-    <form action="#">
-      <div class="row">
-        <label>Select Voice</label>
-        <div class="outer">
-          <select id = "lang"></select>
-        </div>
-      </div>
-      <button id = "conv">  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
-        <path d="M10.804 8 5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"/>
-      </svg></button>
-    </form>
-  </div>
+
 
   <script>
-      const tarea = '<%= txtdata %>'
-      voiceList = document.getElementById("lang"),
+    const tarea = '<%= txtdata %>'
+    voiceList = document.getElementById("lang"),
       speechBtn = document.getElementById("conv");
 
-      let synth = speechSynthesis,
+    let synth = speechSynthesis,
       isSpeaking = true;
 
-      voices();
+    voices();
 
-      function voices(){
-          for(let voice of synth.getVoices()){
-              let selected = voice.name === "Google US English" ? "selected" : "";
-              let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
-              voiceList.insertAdjacentHTML("beforeend", option);
-          }
+    function voices() {
+      for (let voice of synth.getVoices()) {
+        let selected = voice.name === "Google US English" ? "selected" : "";
+        let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
+        voiceList.insertAdjacentHTML("beforeend", option);
       }
+    }
 
-      synth.addEventListener("voiceschanged", voices);
+    synth.addEventListener("voiceschanged", voices);
 
-      function textToSpeech(text){
-          let utterance = new SpeechSynthesisUtterance(text);
-          for(let voice of synth.getVoices()){
-              if(voice.name === voiceList.value){
-                  utterance.voice = voice;
-              }
-          }
-          synth.speak(utterance);
+    function textToSpeech(text) {
+      let utterance = new SpeechSynthesisUtterance(text);
+      for (let voice of synth.getVoices()) {
+        if (voice.name === voiceList.value) {
+          utterance.voice = voice;
+        }
       }
+      synth.speak(utterance);
+    }
 
-      speechBtn.addEventListener("click", e =>{
-          e.preventDefault();
-          if(tarea !== ""){
-              if(!synth.speaking){
-                  textToSpeech(tarea);
-              }
-              if(isSpeaking){
-                      synth.resume();
-                      isSpeaking = false;
-                      speechBtn.innerText = "Pause Speech";
-                  }
-              else{
-                      synth.pause();
-                      isSpeaking = true;
-                      speechBtn.innerText = "Resume Speech";
-                  }
-          }
-      });
+    speechBtn.addEventListener("click", e => {
+      e.preventDefault();
+      if (tarea !== "") {
+        if (!synth.speaking) {
+          textToSpeech(tarea);
+        }
+        if (isSpeaking) {
+          synth.resume();
+          isSpeaking = false;
+          speechBtn.setAttribute("src", "/draft/img/pause.png");
+        }
+        else {
+          synth.pause();
+          isSpeaking = true;
+          speechBtn.setAttribute("src", "/draft/img/play.png");
+        }
+      }
+    });
   </script>
 
 
