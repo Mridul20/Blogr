@@ -35,7 +35,7 @@ html{
 /* User and time info */
 
 .comment .info{
-    width: 17%;
+    width: 10%;
 }
 
 .comment.user-comment .info{
@@ -142,7 +142,7 @@ html{
 
 .write-new{
     margin: 80px auto 0;
-    width: 50%;
+    width: 70%;
 }
 
 .write-new textarea{

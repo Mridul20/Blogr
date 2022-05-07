@@ -59,7 +59,11 @@
   </header>
   <!-- End Header -->
 
-  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <div class="container " style="width: 100%; padding-left: 0; padding-right: 0;">
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8">
+        <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
@@ -158,21 +162,7 @@
 
     </div>
     <br><br>
-    <div style="display: flex;justify-content: right;text-align: center;">
-
-      <% for(let i=0; i<tag.length ;i++) { %>
-        <span class="rcorners2">
-          <%= tag[i] %>
-        </span>
-        <% } %>
-          <!-- <span class = "rcorners2"> Item 1</span>
-        <span class = "rcorners2"> Item 1</span>
-
-        <span class = "rcorners2"> Item 1</span>
-        <span class = "rcorners2"> Item 1</span>
-        <span class = "rcorners2"> Item 1</span>
-        <span class = "rcorners2"> Item 1</span> -->
-    </div>
+    
   </section>
 
   <script>
@@ -331,10 +321,10 @@
     });
   </script>
 
+<div class="astrodivider"><div class="astrodividermask"></div><span><i>&#10038;</i></span></div>
 
 
-
-  <div class="container" id="">
+  <div class="container">
 
     <ul class="comment-section">
 
@@ -364,6 +354,8 @@
       </li>
       <% } %> 
 
+      <div class="divider"><span></span><span>Write Comment</span><span></span></div>
+
       <li class="write-new">
 
         <form action="/postcomment/<%= author %>/<%-key%>"  method="post">
@@ -384,6 +376,32 @@
     </ul>
 
   </div>
+      </div>
+      <div class="col-2">
+        <section id="secid">
+          <div class="container" style="text-align: right; align-items: center; margin-top: 80%; padding-right: 0%;">
+            <h3 style="text-align: center; margin-left: 22%; margin-bottom: 10%;">Tags</h3>
+            <% for(let i=0; i<tag.length ;i++) { %>
+              <div style="display: block; margin-bottom: 3%;">
+                <button type="button" class="btn btn-outline-dark" style="width: 80%;"><%= tag[i] %></button>
+              </div>
+              <% } %>
+                <!-- <span class = "rcorners2"> Item 1</span>
+              <span class = "rcorners2"> Item 1</span>
+      
+              <span class = "rcorners2"> Item 1</span>
+              <span class = "rcorners2"> Item 1</span>
+              <span class = "rcorners2"> Item 1</span>
+              <span class = "rcorners2"> Item 1</span> -->
+          </div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+
+
+  
 
 
 
