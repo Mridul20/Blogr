@@ -32,7 +32,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb+srv://admin:admin@cluster0.yavmq.mongodb.net/blogrDB");
+mongoose.connect(
+  "mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogrDB"
+);
 
 const blogSchema = {
   key: String,
