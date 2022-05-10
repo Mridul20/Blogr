@@ -2,10 +2,11 @@
 ### Description
 
 
-“VoteIt” is an online mobile application that aims to provide users with a smooth and efficient way to cast their votes, manage and guide election processes effectively. It enables voters to choose their Candidate using their Mobile Phones thus reducing the load to travel and fulfill their right to vote. Also, it helps election Officers to manage and conduct elections smoothly. Admins manage the entire process of both Voters and Officers. The system is fully secured as it always asks for the OTP from the voter before casting their vote ensuring that no user can vote multiple times. Also, while logging in voters have to enter their VOTER_ID which is unique for every user. The Result Screen
-displays the result of the election once it's over.
+“Blogr” is a web application, which provides user a platform to share his ideas with the whole world in form of text/audio. It is a blogging website with additional features to maximize the learning capabilities of the user.
 **[Live-Link to site.](https://bl0gr.herokuapp.com/)**
 
+
+## Features
 
 ## Setup/Installation Requirements
 Here is a run through of how to set up the application:
