@@ -85,10 +85,15 @@ app.get("/profile/:username", function (req, res) {
   User.find({ username: req.params.username }, function (err, result) {
     Blog.find({ author: req.params.username }, function (error, output) {
       Blog.find({ key: result[0].favourite }, function (erro, ans) {
-        console.log("size");
-        console.log(output.length);
+        Blog.find({ author: req.params.username }, function (eror, outp) {
+        let cntreads = 0;
+        for(let i=0;i<outp.length;i++)
+        {
+          cntreads = cntreads + outp[i].views;
+        }
         const data = {
           blog: output,
+          cntreads : cntreads,
           name: result[0].fullname,
           username: result[0].username,
           noofblog: result[0].blogs.length,
@@ -100,6 +105,7 @@ app.get("/profile/:username", function (req, res) {
         };
         return res.render("profile", data);
       });
+    });
     });
   });
 });
@@ -185,6 +191,7 @@ app.get("/view/:author/:key", function (req, res) {
             tag : [],
             txtdata : "",
             comments : [],
+            login : true,
             loggedinuser : req.user.username, 
           });
         else {
@@ -206,6 +213,7 @@ app.get("/view/:author/:key", function (req, res) {
             bkmark: bkmark,
             txtdata : result[0].txtdata,
             comments : result[0].comments,
+            login : true,
             loggedinuser : req.user.username, 
           });
         }
@@ -224,6 +232,7 @@ app.get("/view/:author/:key", function (req, res) {
           bkmark: 0,
           tag : [],
           txtdata : "",
+          login : false,
           comments : [],
           loggedinuser : "null", 
         });
@@ -243,6 +252,7 @@ app.get("/view/:author/:key", function (req, res) {
           covimg: result[0].covimg,
           tag : result[0].tag,
           bkmark: 0,
+          login : false,
           txtdata : result[0].txtdata,
           comments : result[0].comments,
           loggedinuser : "null", 
@@ -275,6 +285,10 @@ app.post("/bookmark", function (req, res) {
         }
       }
     );
+  }
+  else
+  {
+    res.redirect("/login");
   }
 });
 
@@ -512,8 +526,8 @@ app.post(
 
 app.get("/search/:query", function (req, res) {
   let query = req.params.query;
-  Blog.find(
-    { $or: [{ tag: query }, { title: query }, { author: query }] },
+  const regex =  new RegExp(query,'g');
+  Blog.find({ $or: [{ tag: { $regex: query, $options: 'i' }}, { title: { $regex: query, $options: 'i' } }, { author: { $regex: query, $options: 'i' } }] },
     function (err, result) {
       console.log(result);
       if (req.isAuthenticated())
