@@ -32,9 +32,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(
-  "mongodb+srv://admin:admin@cluster0.qyck5.mongodb.net/blogrDB"
-);
+mongoose.connect("mongodb+srv://admin:admin@cluster0.yavmq.mongodb.net/blogrDB");
 
 const blogSchema = {
   key: String,
@@ -81,7 +79,6 @@ const allTagList = ["Advertising" , "Advice","America","Amor","Android","Animals
 
 
 app.get("/profile/:username", function (req, res) {
-  console.log(req.params);
   User.find({ username: req.params.username }, function (err, result) {
     Blog.find({ author: req.params.username }, function (error, output) {
       Blog.find({ key: result[0].favourite }, function (erro, ans) {
@@ -111,11 +108,8 @@ app.get("/profile/:username", function (req, res) {
 });
 
 app.get("/", function (req, res) {
-  console.log("np req");
   Blog.find({}, function (err, result) {
     var sendres = result.splice(0, 3);
-
-    // console.log(sendres.length);
     if (req.isAuthenticated())
       return res.render("home", {
         login: true,
@@ -147,7 +141,6 @@ app.get("/logout", function (req, res) {
 
 app.get("/draft/:author/:key", function (req, res) {
   Blog.find({ key: req.params.key }, function (err, result) {
-    console.log(result);
     if (result.length == 0)
       return res.render("draft", {
         author: req.params.author,
@@ -202,7 +195,6 @@ app.get("/view/:author/:key", function (req, res) {
               if (erro) console.log(erro);
             }
           );
-          console.log(result[0].txtdata);
           return res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
@@ -263,7 +255,6 @@ app.get("/view/:author/:key", function (req, res) {
 });
 
 app.post("/bookmark", function (req, res) {
-  console.log("post req");
   if (req.isAuthenticated()) {
     var usern = req.user.username;
     User.findOneAndUpdate(
@@ -369,7 +360,6 @@ app.get("/edit", function (req, res) {
 
 app.get("/display/:author/:key", function (req, res) {
   Blog.find({ key: req.params.key }, function (err, result) {
-    console.log(result);
     if (result.length == 0)
       return res.render("display", {
         author: req.params.author,
@@ -418,8 +408,6 @@ app.post("/saveblogdata", function (req, res) {
   const jsonbody = JSON.parse(req.body.blogdata);
   for (var i = 0; i < jsonbody.blocks.length; i++)
     txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
-
-  console.log(txtdata);
 
   Blog.find({ key: req.body.key }, function (err, result) {
     if (err) console.log(err);
@@ -472,8 +460,6 @@ app.post("/saveblogdata", function (req, res) {
 });
 
 app.post("/register", function (req, res) {
-  console.log(req.body);
-
   const usr = new User({
     username: req.body.username,
     fullname: req.body.name,
@@ -529,7 +515,6 @@ app.get("/search/:query", function (req, res) {
   const regex =  new RegExp(query,'g');
   Blog.find({ $or: [{ tag: { $regex: query, $options: 'i' }}, { title: { $regex: query, $options: 'i' } }, { author: { $regex: query, $options: 'i' } }] },
     function (err, result) {
-      console.log(result);
       if (req.isAuthenticated())
         return res.render("search", {
           login: true,
@@ -596,8 +581,6 @@ app.post("/contact", function (req, res) {
 app.post("/updateprofile", function (req, res) {
   const username = req.user.username;
   User.find({ username: username }, function (err, result) {
-    console.log(result);
-    console.log(req.body);
     var email;
     if (req.body.email == "") email = result[0].email;
     else email = req.body.email;
@@ -621,9 +604,7 @@ app.post("/updateprofile", function (req, res) {
   });
 });
 
-app.get("/xyz", function (req, res) {
-  console.log("hnp req");
-});
+
 app.listen(process.env.PORT || 3000, function(){
   console.log("Server started at port 3000");
 });
