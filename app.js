@@ -190,7 +190,7 @@ app.get("/view/:author/:key",async function (req, res) {
             loggedinuser : req.user.username, 
           });
         else {
-          await Blog.update(
+          Blog.update(
             { key: req.params.key },
             { $inc: { views: 1 } },
             function (erro) {
@@ -231,7 +231,7 @@ app.get("/view/:author/:key",async function (req, res) {
           loggedinuser : "null", 
         });
       else {
-        await Blog.update(
+        Blog.update(
           { key: req.params.key },
           { $inc: { views: 1 } },
           function (erro) {
