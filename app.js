@@ -174,9 +174,9 @@ app.get("/view/:author/:key", function (req, res) {
       let bkmark = 0;
       for (var i = 0; i < resu[0].favourite.length; i++)
         if (resu[0].favourite[i] == req.params.key) bkmark = 1;
-      Blog.find({ key: req.params.key }, function (err, result) {
+      Blog.find({ key: req.params.key }, async function (err, result) {
         if (result.length == 0)
-          return res.render("blogview", {
+          await res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
             data: null,
@@ -190,14 +190,14 @@ app.get("/view/:author/:key", function (req, res) {
             loggedinuser : req.user.username, 
           });
         else {
-          Blog.update(
+          await Blog.update(
             { key: req.params.key },
             { $inc: { views: 1 } },
             function (erro) {
               if (erro) console.log(erro);
             }
           );
-          return res.render("blogview", {
+          await res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
             data: result[0].body,
