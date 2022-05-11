@@ -381,7 +381,7 @@ app.get("/display/:author/:key", function (req, res) {
   });
 });
 
-app.post("/saveblogdata", function (req, res) {
+app.post("/saveblogdata",function (req, res) {
   const monthNames = [
     "Jan.",
     "Feb.",
@@ -411,17 +411,17 @@ app.post("/saveblogdata", function (req, res) {
   for (var i = 0; i < jsonbody.blocks.length; i++)
     txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
 
-  Blog.find({ key: req.body.key }, function (err, result) {
+Blog.find({ key: req.body.key }, async  function (err, result) {
     if (err) console.log(err);
     if (result.length == 0) {
       const imgFile = req.body.covimg;
-      cloudinary.uploader.upload(imgFile, function (err, resu) {
+      await cloudinary.uploader.upload(imgFile, function (err, resu) {
         var newblog = new Blog({
           key: req.body.key,
           title: req.body.title,
           body: String(req.body.blogdata),
           author: req.body.author,
-          draft: req.body.draft,
+          draft: req.body.draftkey,
           covimg: resu.url,
           lastUpdateTime: time,
           views: 0,
@@ -446,7 +446,7 @@ app.post("/saveblogdata", function (req, res) {
           {
             title: req.body.title,
             body: req.body.blogdata,
-            draft: req.body.draft,
+            draft: req.body.draftkey,
             covimg: resu.url,
             lastUpdateTime: time,
             tag : req.body.tag,
