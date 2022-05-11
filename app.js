@@ -168,15 +168,15 @@ app.get("/draft/:author/:key", function (req, res) {
   });
 });
 
-app.get("/view/:author/:key",async function (req, res) {
+app.get("/view/:author/:key",function (req, res) {
   if (req.isAuthenticated()) {
-    User.find({ username: req.user.username },async function (err, resu) {
+    User.find({ username: req.user.username },function (err, resu) {
       let bkmark = 0;
       for (var i = 0; i < resu[0].favourite.length; i++)
         if (resu[0].favourite[i] == req.params.key) bkmark = 1;
-      Blog.find({ key: req.params.key }, async function (err, result) {
+      Blog.find({ key: req.params.key }, function (err, result) {
         if (result.length == 0)
-          await res.render("blogview", {
+          res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
             data: null,
@@ -197,7 +197,7 @@ app.get("/view/:author/:key",async function (req, res) {
               if (erro) console.log(erro);
             }
           );
-          await res.render("blogview", {
+          res.render("blogview", {
             author: req.params.author,
             key: req.params.key,
             data: result[0].body,
@@ -215,9 +215,9 @@ app.get("/view/:author/:key",async function (req, res) {
     });
   } 
   else {
-    Blog.find({ key: req.params.key }, async function (err, result) {
+    Blog.find({ key: req.params.key }, function (err, result) {
       if (result.length == 0)
-        await res.render("blogview", {
+        res.render("blogview", {
           author: req.params.author,
           key: req.params.key,
           data: null,
@@ -238,7 +238,7 @@ app.get("/view/:author/:key",async function (req, res) {
             if (erro) console.log(erro);
           }
         );
-        await res.render("blogview", {
+        res.render("blogview", {
           author: req.params.author,
           key: req.params.key,
           data: result[0].body,
@@ -411,11 +411,11 @@ app.post("/saveblogdata",function (req, res) {
   for (var i = 0; i < jsonbody.blocks.length; i++)
     txtdata = txtdata + jsonbody.blocks[i].data.text + newpar;
 
-Blog.find({ key: req.body.key }, async  function (err, result) {
+Blog.find({ key: req.body.key },  function (err, result) {
     if (err) console.log(err);
     if (result.length == 0) {
       const imgFile = req.body.covimg;
-      await cloudinary.uploader.upload(imgFile, function (err, resu) {
+      cloudinary.uploader.upload(imgFile, function (err, resu) {
         var newblog = new Blog({
           key: req.body.key,
           title: req.body.title,
